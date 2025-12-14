@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بيب بيب - تطبيق التنقل الذكي - تحديث</title>
+    <link rel="icon" href="logo.png" type="image/png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="shortcut icon" href="logo.png" type="image/png">
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Animate.css for additional animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Google Fonts for Arabic and English -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <!-- Configure Tailwind for custom colors/theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-yellow': '#fdd703',
+                        'light-yellow': '#fef2ab',
+                        'dark-yellow': '#ae9000',
+                        'primary-black': '#000000',
+                        'dark-green': '#5b532c',
+                        'accent-green': '#63a361',
+                        'luxury-gold': '#d4af37',
+                        'deep-black': '#0a0a0a',
+                    },
+                    fontFamily: {
+                        'jannat': ["Vazirmatn", 'sans-serif'],
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite alternate',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%': { boxShadow: '0 0 5px #fdd703, 0 0 10px #fdd703, 0 0 15px #fdd703' },
+                            '100%': { boxShadow: '0 0 10px #fdd703, 0 0 20px #fdd703, 0 0 30px #fdd703' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(30px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --font_7: normal normal normal 20px / 1.4em "Vazirmatn", sans-serif;
+        }
+        html[dir="rtl"] body {
+    text-align: right;
+}
+
+html[dir="ltr"] body {
+    
+    text-align: left;
+}
+
+        body {
+            font-family: "Vazirmatn", sans-serif;
+            background-color: #fef2ab;
+            overflow-x: hidden;
+        }
+        
+        .font-jannat {
+            font-family: "Vazirmatn", sans-serif;
+        }
+        
+        .mail-icon svg {
+            transition: all 0.3s ease;
+            fill: currentColor;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .lang-dropdown.active .chevron-down {
+            transform: rotate(180deg);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #fdd703 0%, #ae9000 100%);
+        }
+        
+        .impact-section {
+            background-color: #5b532c;
+            color: white;
+        }
+        
+        /* Luxury styling */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+        
+        .luxury-border {
+            border: 1px solid rgba(253, 215, 3, 0.3);
+        }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, #fdd703 0%, #d4af37 50%, #ae9000 100%);
+        }
+        
+        .text-gold {
+            color: #d4af37;
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        .bg{
+            background-image: url("./images/beeb-beeb-section.png");
+            background-size: cover;
+            background-position: left;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #fdd703, #ae9000);
+            border-radius: 10px;
+        }
+        
+        /* Hide elements initially for animation */
+        [data-aos] {
+            opacity: 0;
+            transition-property: transform, opacity;
+        }
+        
+        /* Custom animations */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        
+        .shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+            background-size: 1000px 100%;
+        }
+        
+        /* Parallax effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        /* responsive padding moved to utility classes on the element to preserve responsiveness */
+        /* 3D transform on hover */
+        .hover-3d {
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        
+        .hover-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Magnetic button effect */
+        .magnetic-btn {
+            transition: transform 0.3s ease;
+        }
+        
+        .magnetic-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Custom styling for the new hero section */
+        .hero-text-gradient {
+            background: linear-gradient(135deg, #000000 0%, #5b532c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .highlight-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 30%;
+            background-color: rgba(253, 215, 3, 0.3);
+            z-index: -1;
+            transform: skewX(-15deg);
+        }
+
+        /* Process section arrow (RTL/LTR friendly) */
+        .process-arrow::before {
+            content: '›';
+            display: inline-block;
+        }
+        [dir="ltr"] .process-arrow::before {
+            content: '‹';
+        }
+
+
+        .pulse-gold {
+    animation: pulse-gold 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-gold {
+    0% {
+        box-shadow: 0 0 20px rgba(253, 215, 3, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 40px rgba(253, 215, 3, 0.8), 0 0 60px rgba(253, 215, 3, 0.4);
+    }
+}
+ /* Product slider styles */
+       .product-swiper {
+  padding: 30px 0;
+}
+
+.product-swiper .swiper-slide {
+  width: 260px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-swiper img {
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 25px 60px rgba(0,0,0,.25);
+}
+    </style>
+</head>
+<body class="bg-light-yellow font-jannat">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-lg">
+        <div class="container mr-auto px-4 sm:px-6 lg:px-4 py-3 flex justify-between items-center">
+            
+            <!-- Logo/Brand Link -->
+            <a href="#" class="flex-1 flex justify-center items-center" aria-label="بيب بيب الرئيسية">
+                <div class="relative flex justify-center">
+                    <div class="absolute -inset-1 bg-primary-yellow rounded-full blur opacity-30"></div>
+                    <img src="logo.png" alt="لوجو بيب بيب" class="h-16 w-16 object-contain relative">
+                </div>
+            </a>
+
+            <!-- Right side: Buttons and Language Selector -->
+            <div class="hidden md:flex items-center space-x-4">
+                
+                <!-- Menu Button -->
+                
+
+                <!-- Language Selector Dropdown -->
+                <div class="relative inline-block text-left">
+                    <button id="langButton" class="lang-dropdown inline-flex justify-center items-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-all duration-300 magnetic-btn" aria-expanded="false" aria-haspopup="true">
+                        <img id="currentLangFlag" src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png" alt="Arabic Flag" class="h-4 w-4 mr-1 rounded-full">
+                        <span id="currentLangCode">AR</span>
+                        <svg class="-mr-1 ml-2 h-4 w-4 transition-transform duration-200 chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.97l3.71-3.74a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    
+                    <div id="langMenu" class="hidden absolute ltr:right-0 rtl:left-0 mt-2 w-28 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none luxury-card" role="menu" aria-orientation="vertical" aria-labelledby="langButton" tabindex="-1">
+                        <!-- Language options -->
+                        <div class="py-1" role="none">
+                            <a href="#" class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200" data-lang="ar">
+                                <img src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png" alt="Arabic Flag" class="h-4 w-4 mr-2 rounded-full"> AR
+                            </a>
+                            <a href="#" class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200" data-lang="en">
+                                <img src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png" alt="English Flag" class="h-4 w-4 mr-2 rounded-full"> EN
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobileMenuButton" class="text-primary-black p-2 rounded-lg hover:bg-gray-100 transition-all duration-300" aria-label="Open menu">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-gray-100 pb-4">
+            <div class="flex flex-col space-y-2 px-4 pt-2">
+                <a href="#" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200">
+                    <span class="mail-icon mr-2">
+                        <svg viewBox="0 0 200 200" data-type="shape">
+                            <g>
+                                <path d="M35.572 38.15h128.855c5.693 0 10.308-4.616 10.308-10.308s-4.616-10.308-10.308-10.308H35.572c-5.693 0-10.308 4.616-10.308 10.308S29.88 38.15 35.572 38.15z"></path>
+                                <path d="M164.428 89.692H35.572c-5.693 0-10.308 4.616-10.308 10.308s4.616 10.308 10.308 10.308h128.855c5.693 0 10.308-4.616 10.308-10.308s-4.615-10.308-10.307-10.308z"></path>
+                                <path d="M164.428 161.85H87.114c-5.693 0-10.308 4.616-10.308 10.308 0 5.693 4.616 10.308 10.308 10.308h77.313c5.693 0 10.308-4.616 10.308-10.308.001-5.692-4.615-10.308-10.307-10.308z"></path>
+                            </g>
+                        </svg>
+                    </span>
+                    <span data-translate="menu">القائمة</span>
+                </a>
+                
+                <!-- Simple language link/placeholder for mobile -->
+                <div class="px-3 py-2 text-sm font-medium text-gray-700 rounded-lg">
+                    <span data-translate="language">اللغة:</span> 
+                    <span id="mobileCurrentLang">العربية</span>
+                </div>
+                
+                <!-- Language options for mobile -->
+                <div class="flex flex-wrap gap-2 px-3">
+                    <button class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full" data-lang="ar">العربية</button>
+                    <button class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full" data-lang="en">English</button>
+                </div>
+
+                
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class=" h-screen text-white overflow-hidden" style="background-image:  url('/assets/img/bg-hero-section.png'); background-position: center center; background-repeat: no-repeat; background-size: cover;">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center justify-space-around  md:space-x-12">
+                    
+                    <!-- Text Content -->
+                    <div class="mb-12 md:mb-0 mt-[180px] text-center text-start" data-aos="fade-right" data-aos-duration="1000">
+                        <h1 class="text-6xl md:text-5xl lg:text-7xl font-extrabold leading-tight mb-6 animate__animated animate__fadeInUp text-[#1D1D1B]">
+                            <span class="inline-block mb-4" data-translate="heroTitle1">تنقّل ...</span><br/>
+                            <span class="inline-block" data-translate="heroTitle2">بالشكل الأمثل</span>
+                        </h1><br/>
+                        <p class="text-xl md:text-2xl text-[#1D1D1B] mb-6 font-semibold animate__animated animate__fadeInUp animate__delay-1s max-w-lg md:mx-0" data-translate="heroSubtitle">
+                       <span class="block"> بيب بيب أقرب لك.</span><br/>
+                       <span class="block">     إذا احتجت وسيلة تنقّل،</span>
+                        </p>
+
+                        <!-- CTA Button (black pill) -->
+                        <div class="mt-4 animate__animated animate__fadeInUp animate__delay-2s">
+                            <a data-translate="heroJoinNow" href="invest-with-beeb-beeb.html" class="inline-block px-10 py-4 text-lg font-bold text-white bg-primary-black rounded-full shadow-lg hover:bg-black-800 transition-all duration-200 transform hover:scale-[1.23] active:scale-95 magnetic-btn" data-translate="herobtn">
+                                انضم كشريك الان
+                            </a>
+                        </div>
+                     
+                    </div>
+
+                    <!-- CTA Column -->
+                    <div class="md:w-1/2 flex flex-col items-center md:items-end space-y-8">
+                     
+                        <!-- CTA Button Section -->
+                        <div class="flex justify-center md:justify-end relative w-full" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="300">
+                            <!-- Animated CTA Button -->
+                            <div class="relative group">
+                                <!-- Background Glow Effect -->
+                                <div class="absolute -inset-4 bg-primary-yellow rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-all duration-500 animate-pulse"></div>
+                            </div>
+                        </div>
+
+                       
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+      
+        <!-- About Section -->
+        <section class="py-20 bg-[#EBE4C8] overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-center">
+                    <div class="relative w-full max-w-3xl text-center" data-aos="zoom-in" data-aos-duration="1000">
+                        <!-- circular logo on top -->
+                        <div class="absolute -top-12 left-1/2  transform -translate-x-1/2">
+                            <div class="bg-black rounded-full p-2  shadow-xl ">
+                                <img src="/assets/img/beeb-beeb-logo.png" alt="لوجو بيب بيب" class="w-20 h-20 object-cover">
+                            </div>
+                        </div>
+
+                        <!-- promo card -->
+                        <div class="bg-[#F3D008] rounded-3xl px-8 py-12 md:py-16 shadow-2xl">
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-primary-black mb-4" data-translate="promoCardTitle">ودّك بدخل يومي متكرر على مدار السنة؟</h3>
+                            <p class="text-lg md:text-xl text-dark-green mb-6" data-translate="promoCardDesc">مع بيب بيب، هذا الدخل يصير واقع</p>
+                            <a href="/invest-with-beeb-beeb.html" class="inline-block px-5 py-3 bg-primary-black text-white font-bold leading-6 text-xl rounded-full shadow-lg hover:bg-gray-800 transition-all duration-300" data-translate="promoCardLink">انضم كشريكك الان</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+        <!-- New Dark Showcase Section (scooter + description) -->
+        <section class="py-20 text-white overflow-hidden" style="background-image: url('/assets/img/bike-image.png'); background-position: center; background-repeat: no-repeat; background-size: cover; background-blend-mode: overlay;">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col ltr:md:flex-row rtl:md:flex-row-reverse items-center gap-16">
+                    <!-- Text Column -->
+                    <div class="md:w-1/2 lg:pt-10 lg:pb-16 lg:px-4 lg:px-0 lg:ps-56" data-aos="fade-up" data-aos-duration="1000">
+                        <h2 class="text-5xl md:text-6xl font-extrabold mb-6" data-translate="aboutTitle">بيب بيب</h2>
+                        <p class="text-lg md:text-xl text-gray-300 mb-6 leading-relaxed" data-translate="aboutDesc1">
+                            بيب بيب اليوم تقدّم منظومة متكاملة من الحلول التقنية اللي تجمع بين الأمان العالي، والكفاءة في التشغيل، والاهتمام بالاستدامة.
+                        </p>
+                        <p class="text-lg md:text-xl text-gray-300 leading-relaxed" data-translate="aboutDesc2">
+                            نطوّر تقنياتنا باستمرار عشان تكون التجربة أسهل، أوضح، وأقرب لاحتياج المستخدم اليومي، مع عناية دقيقة بتفاصيل النظام. هدفنا إن يكون التنقّل داخل المدينة أكثر سلاسة وبحلول تقنية مدروسة تخدم المستخدم والبيئة في نفس الوقت.
+                        </p>
+                    </div>
+
+                    <!-- Image Column -->
+                 
+                </div>
+            </div>
+        </section>
+        <!-- Where We Are Section -->
+        <section class="py-20 bg-white overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-start md:items-start gap-12 max-w-6xl mx-auto">
+                      <!-- Text (right) -->
+                    <div class="md:w-1/2 text-start" data-aos="fade-up" data-aos-duration="800">
+                        <h2 class="section-title text-4xl font-bold text-primary-black mb-8" data-translate="whereWeAreTitle">رحلة التوسع</h2>
+                        <p class="text-xl text-gray-700 mb-6 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" data-translate="whereWeAreDesc1">
+                            بدأت رحلة بيب بيب من المملكة العربية السعودية، واليوم نوسّع حضورنا بخطوات واثقة عشان نوصل لمدن ومجتمعات جديدة. نقدّم تجربة تنقّل تجمع بين المتعة، المرونة، وسهولة الاستخدام، لنخدم مختلف احتياجات التنقّل داخل المدينة بأسلوب عملي ومريح.
+                        </p>
+                        <p class="text-xl text-gray-700 mb-10 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" data-translate="whereWeAreDesc2">
+                            نؤمن إن التنقّل الحديث جزء أساسي من جودة الحياة، عشان كذا نعمل باستمرار على تقديم حلول تساعد الناس يتحرّكون بسهولة، وتساهم في بناء مدن أكثر نشاطًا، وكفاءة، واستدامة.
+                        </p>
+                    </div>
+                    <!-- Map Image (left on desktop) -->
+                    <div class="md:w-1/2 w-full flex justify-center md:justify-start" data-aos="zoom-in" data-aos-duration="1000">
+                        <img src="/assets/img/map-section.png" alt="خريطة تواجد بيب بيب" class="w-full max-w-lg md:max-w-none h-auto md:max-h-[420px] object-cover">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+   <!-- What Is Beep beep Section -->
+        <section class="py-20 bg-[#F3D008] bg overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class=" text-4xl font-bold text-primary-black mb-8" data-aos="fade-up" data-aos-duration="800" data-translate="whatIsTitle">ما هو بيب بيب؟</h2>
+                    <p class="text-xl text-gray-700 mb-3 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" data-translate="whatIsDesc1">
+                        بيب بيب هو تطبيق تنقل ذكي يتيح لك استئجار الدراجات والسكوترات الكهربائية بكل سهولة.
+                    </p>
+                    <p class="text-xl text-gray-700 mb-3 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400" data-translate="whatIsDesc2">
+                        تقدر تفتح التطبيق تلاقي اقرب مركبة وتبدا رحلتك فورا بدون اجراءات طويلة ولا انتظار
+                    </p>
+                    <p class="text-xl text-gray-700 mb-4 leading-relaxed" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600" data-translate="whatIsDesc3">
+                        التطبيق مصمم ليوفر تنقل سريع اقتصادي وصديق للبيئة داخل المدن والمناطق الحيوية
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="text-center p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover-3d" data-aos="fade-up" data-aos-duration="800">
+                            <div class="text-primary-yellow mb-4 mx-auto">
+                                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary-black mb-3" data-translate="fastFeature">سريع وفوري</h3>
+                            <p class="text-gray-700" data-translate="fastDesc">ابدأ رحلتك في ثوانٍ معدودة بدون إجراءات معقدة</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover-3d" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                            <div class="text-primary-yellow mb-4 mx-auto">
+                                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m-3 0h6"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary-black mb-3" data-translate="affordableFeature">اقتصادي</h3>
+                            <p class="text-gray-700" data-translate="affordableDesc">أسعار تنافسية تدفع فقط مقابل الدقائق التي تستخدمها</p>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] hover-3d" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                            <div class="text-primary-yellow mb-4 mx-auto">
+                                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary-black mb-3" data-translate="ecoFeature">صديق للبيئة</h3>
+                            <p class="text-gray-700" data-translate="ecoDesc">سكوترات كهربائية تخفض البصمة الكربونية</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section (visual two-column with image on right) -->
+        <section class="py-20 bg-white overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-6xl mx-auto">
+                    <!-- Text Column (left) -->
+                    <div class="md:w-1/2 text-start" data-aos="fade-up" data-aos-duration="1000">
+                        <h2 class="text-4xl md:text-5xl font-extrabold mb-6" data-translate="impactTitle">شغّل منظومة تنقّل حديثة في مدينتك بالشراكة مع بيب بيب</h2>
+                        <p class="text-lg md:text-xl text-gray-700 mb-6 leading-relaxed" data-translate="impactDesc1">
+                            نوفّر لك نموذج تشغيل متكامل يتيح لك الإسهام في تطوير خدمات التنقّل الحضري، ودعم بيئة أنظف، وحركة يومية أسهل للسكان، ضمن إطار تشغيلي واضح وفرص توسّع مدروسة.
+                        </p>
+                        <p class="text-lg md:text-xl text-gray-700 leading-relaxed" data-translate="impactDesc2">
+                            مع بيب بيب، تصبح الشريك المشغّل لخدمات السكوترات والدراجات في مدينتك، وتشارك في تقديم خدمة يحتاجها الناس يوميًا، وتفتح لنفسك باب دخل مستدام.
+                        </p>
+                    </div>
+
+                    <!-- Image Column (right) -->
+                    <div class="md:w-1/2 flex justify-center md:justify-end" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="200">
+                        <div class="w-full max-w-md">
+                            <img src="/assets/img/scooter-man.png" alt="سكوتر في المدينة" class="w-full h-[420px] md:h-[520px] object-cover rounded-3xl shadow-2xl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+    <section class="relative bg-[#FFF4B8] py-20 overflow-visible relative">
+  <div class="container-f mx-auto px-6">
+
+    <!-- صورة الموبايل (Absolute) -->
+    <div class="hidden lg:block absolute left-10 top-[-40px] -translate-y-1/2 " data-aos="zoom-in" data-aos-duration="1000">
+      <img
+        src="/assets/img/mobile.png"
+        alt="App Preview"
+        class="w-[320px] xl:w-[380px]"
+      />
+    </div>
+
+    <!-- المحتوى -->
+    <div class="lg:pl-[420px] text-center lg:text-start">
+
+            <!-- العنوان -->
+            <h2 class="text-2xl lg:text-6xl font-bold text-primary-black mb-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100" data-translate="processTitle">
+        ابدأ الركوب في 3 خطوات بسيطة
+      </h2>
+
+            <p class="text-gray-700 max-w-3xl mx-auto my-1 lg:mx-0 mb-16" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200" data-translate="processDesc">
+        تم تصميم تجربة بيب بيب للكفاءة القصوى والمتعة.
+      </p>
+
+    <!-- الخطوات -->
+    <div class="flex flex-col lg:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-duration="900">
+
+        <!-- Step 1 -->
+                <div class="relative bg-white rounded-full w-40 h-40 md:w-60 md:h-60 lg:w-[15rem] lg:h-[15rem] flex flex-col items-center justify-center text-center shadow transform transition-all duration-300 hover:scale-[1.03]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                    <span class="absolute top-[10px] right-6 md:right-[205px] text-xl pt-1 text-[#F3D008] translate-x-1/2 bg-primary-black  w-8 h-8 rounded-full flex items-center justify-center font-bold floating">
+            1
+          </span>
+          <h3 class="text-xl font-bold mb-2" data-translate="processStep1Title">ابحث وامسح</h3>
+          <p class="text-gray-600 text-sm px-6" data-translate="processStep1Desc">
+            حدد موقع أقرب سكوتر على خريطة التطبيق وامسح رمز الاستجابة السريعة لفتحه.
+          </p>
+        </div>
+
+        <!-- سهم -->
+        <span class="process-arrow hidden lg:block text-3xl text-primary-black"></span>
+
+        <!-- Step 2 -->
+                <div class="relative bg-white rounded-full w-40 h-40 md:w-60 md:h-60 lg:w-[15rem] lg:h-[15rem] flex flex-col items-center justify-center text-center shadow transform transition-all duration-300 hover:scale-[1.03]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <span class="absolute top-[10px] right-6 md:right-[205px] text-xl pt-1 text-[#F3D008] translate-x-1/2 bg-primary-black  w-8 h-8 rounded-full flex items-center justify-center font-bold floating">
+            2
+          </span>
+          <h3 class="text-xl font-bold mb-2" data-translate="processStep2Title">اركب واستمتع</h3>
+          <p class="text-gray-600 text-sm px-6" data-translate="processStep2Desc">
+            تجول في المدينة مستمتعًا بالهواء النقي، وتأكد من اتباع قوانين المرور.
+          </p>
+        </div>
+
+        <!-- سهم -->
+        <span class="process-arrow hidden lg:block text-3xl text-primary-black"></span>
+
+        <!-- Step 3 -->
+                <div class="relative bg-white rounded-full w-40 h-40 md:w-60 md:h-60 lg:w-[15rem] lg:h-[15rem] flex flex-col items-center justify-center text-center shadow transform transition-all duration-300 hover:scale-[1.03]" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                    <span class="absolute top-[10px] text-xl pt-1 right-6 md:right-[205px] translate-x-1/2 text-[#F3D008] bg-primary-black  w-8 h-8 rounded-full flex items-center justify-center font-bold floating">
+            3
+          </span>
+          <h3 class="text-xl font-bold mb-2" data-translate="processStep3Title">أوقف وأغلق</h3>
+          <p class="text-gray-600 text-sm px-6" data-translate="processStep3Desc">
+            أوقف السكوتر بمسؤولية وانقر على "إنهاء الرحلة" في التطبيق.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+       <!-- Product Details Section -->
+    <section class="py-20 bg-white overflow-hidden" id="product-details">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-5xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
+                    <h2 class="text-4xl font-bold mb-2" data-translate="productSliderTitle">تفاصيل المنتج</h2>
+                    <p class="text-lg text-gray-600 mb-8" data-translate="productSliderDesc">بيب بيب هو تطبيق تنقّل ذكي يتيح لك استئجار السكوترات والدرّاجات الكهربائية بسهولة.</p>
+                </div>
+                  
+                <div class="swiper product-swiper max-w-5xl mx-auto mt-6">
+  <div class="swiper-wrapper">
+
+    <div class="swiper-slide">
+      <img src="/assets/img/scooter-down.png" alt="">
+    </div>
+
+    <div class="swiper-slide">
+      <img src="/assets/img/scooter-head.png" alt="">
+    </div>
+
+    <div class="swiper-slide">
+      <img src="/assets/img/scooter-bottom.png" alt="">
+    </div>
+
+  </div>
+
+  <!-- arrows -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- dots -->
+  <div class="swiper-pagination"></div>
+</div>
+
+                <!-- Slider -->
+                <!-- <div class="product-slider max-w-5xl h-[300px] mx-auto mt-6 relative">
+                    <button type="button" aria-label="previous slide" class="slider-nav prev absolute right-[10rem] top-1/2 -translate-y-1/2 z-50 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                        <span class="text-xl">‹</span>
+                    </button>
+
+                    <div class="slides relative h-[420px] md:h-[520px]">
+                        <div class="slide" data-index="0">
+                            <img src="/assets/img/scooter-down.png" alt="تفاصيل سكوتر" class="w-60 h-60 object-cover rounded-3xl shadow-2xl">
+                        </div>
+                        <div class="slide" data-index="1">
+                            <img src="/assets/img/scooter-head.png" alt="تفاصيل وسطية" class="w-60 h-60 object-cover rounded-3xl shadow-2xl">
+                        </div>
+                        <div class="slide" data-index="2">
+                            <img src="/assets/img/scooter-bottom.png" alt="تفاصيل خلفية" class="w-60 h-60 object-cover rounded-3xl shadow-2xl">
+                        </div>
+                    </div>
+
+                    <button type="button" aria-label="next slide" class="slider-nav next absolute z-50 left-[10rem] top-1/2 -translate-y-1/2 z-30 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                        <span class="text-xl">›</span>
+                    </button>
+
+                    <div class="mt-6 flex justify-center gap-3">
+                        <button class="dot w-3 h-3 rounded-full bg-gray-300" data-index="0" aria-label="slide 1"></button>
+                        <button class="dot w-3 h-3 rounded-full bg-gray-300" data-index="1" aria-label="slide 2"></button>
+                        <button class="dot w-3 h-3 rounded-full bg-gray-300" data-index="2" aria-label="slide 3"></button>
+                    </div>
+                </div> -->
+            </div>
+        </section> 
+        <!-- promo card -->
+    <section class="py-20 bg-[#F3D008] overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-center">
+                    <div class="relative w-full max-w-3xl text-center" data-aos="zoom-in" data-aos-duration="1000">
+                        <!-- circular logo on top -->
+                        <div class="absolute -top-12 left-1/2  transform -translate-x-1/2">
+                            <div class="bg-black rounded-full p-2  shadow-xl ">
+                                <img src="logo.png" alt="لوجو بيب بيب" class="h-14 w-14 object-cover">
+                            </div>
+                        </div>
+
+                        <!-- promo card -->
+                        <div class="bg-white rounded-3xl px-8 py-12 md:py-16  shadow-2xl">
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-primary-black mb-4" data-translate="promoCardTitle">ودّك بدخل يومي متكرر على مدار السنة؟</h3>
+                            <p class="text-lg md:text-xl text-dark-green mb-6" data-translate="promoCardDesc">مع بيب بيب، هذا الدخل يصير واقع</p>
+                            <a data-translate="promoCardLink" href="invest-with-beeb-beeb.html" class="inline-block px-5 py-3 bg-primary-black text-white font-bold leading-6 text-xl rounded-full shadow-lg hover:bg-gray-800 transition-all duration-300">انضم كشريكك الان</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </section>       
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-primary-black text-white py-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <!-- Copyright -->
+                <p class="text-sm text-gray-400" data-translate="copyright">&copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.</p>
+                
+                <!-- Footer Links -->
+                <div class="flex  gap-6 text-sm">
+                    <a href="privacy.html" class="text-gray-400 hover:text-primary-yellow transition-all duration-150" data-translate="privacy">سياسة الخصوصية</a>
+                    <a href="terms.html" class="text-gray-400 hover:text-primary-yellow transition-all duration-150" data-translate="terms">شروط الخدمة</a>
+                    <a href="contact.html" class="text-gray-400 hover:text-primary-yellow transition-all duration-150" data-translate="contact">اتصل بنا</a>
+                </div>
+
+               
+                <!-- Social Icons -->
+<div class="flex gap-4 items-center" dir="ltr">
+    <a href="#" aria-label="Facebook" class="text-gray-400 hover:text-primary-yellow transition-all duration-150">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14 13.5H16.5L17 9.5H14V7.5C14 6.45 14 5.5 16 5.5H17V2.5C16.327 2.454 15.632 2.492 14.945 2.5C13.568 2.5 12.398 3.076 11.531 4.225C11.196 4.757 11 5.424 11 6.25V9.5H8V13.5H11V22H14V13.5Z"/></svg>
+    </a>
+    <a href="https://x.com/beepbeepksa?s=11" aria-label="X" class="text-gray-400 hover:text-primary-yellow transition-all duration-150">
+    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2H21L13.315 10.52 22 22h-6.808l-5.263-6.873L3.56 22H2l8.27-9.035L2 2h6.91l4.77 6.315L18.244 2zm-2.59 17.17h2.057L8.5 4.743H6.293l9.36 14.427z"/>
+    </svg>
+</a>
+
+    <a href="https://www.instagram.com/beepbeepksa?igsh=YmZzdnMwN2FmZmE=" aria-label="Instagram" class="text-gray-400 hover:text-primary-yellow transition-all duration-150">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/company/beepbeepksa/" aria-label="LinkedIn" class="text-gray-400 hover:text-primary-yellow transition-all duration-150">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@beepbeepksa?_r=1&_t=ZS-91qAFEMO7Dc" aria-label="TikTok" class="text-gray-400 hover:text-primary-yellow transition-all duration-150">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+        </svg>
+    </a>
+    <a href="https://snapchat.com/t/mr3outsc" aria-label="Snapchat" class="text-gray-400 hover:text-primary-yellow transition-all duration-150 mt-1.5">
+    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2c2.39 0 4.32 1.94 4.32 4.32v1.02c.01.35.21.66.53.79 1.01.44 2.1 1.02 2.1 2.14 0 .58-.32 1.09-.89 1.43-.28.17-.45.47-.45.78 0 .47.32.89.76 1.02.47.14.96.29 1.36.51.33.17.55.5.55.86a.97.97 0 01-.97.97c-.18 0-.36-.05-.54-.13a4.47 4.47 0 00-1.89-.45c-.41 0-.81.07-1.2.22-.46.16-.95.25-1.45.25-.73 0-1.42-.18-2.04-.49a1.86 1.86 0 00-1.7 0 4.7 4.7 0 01-2.04.49c-.5 0-.99-.09-1.45-.25-.38-.15-.79-.22-1.2-.22-.7 0-1.36.18-1.89.45-.18.08-.36.13-.54.13a.97.97 0 01-.97-.97c0-.36.22-.69.55-.86.4-.22.89-.37 1.36-.51.44-.13.76-.55.76-1.02 0-.31-.17-.6-.45-.78-.57-.34-.89-.85-.89-1.43 0-1.12 1.1-1.7 2.1-2.14.32-.13.52-.44.53-.79V6.32C7.68 3.94 9.61 2 12 2z"/>
+    </svg>
+</a>
+
+</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <!-- JavaScript for Interactions and Translations -->
+    <script>
+        // Translation data
+        const translations = {
+            ar: {
+                // Header
+                menu: "القائمة",
+                downloadApp: "حمل التطبيق الآن",
+                language: "اللغة",
+                
+                // Hero Section
+                heroTitle1: "تنقل ...",
+                heroTitle2: "بالشكل الأمثل",
+                heroJoinNow:"انضم كشريك الان",
+                heroSubtitle: "إذا احتجت وسيلة تنقّل ، بيب بيب أقرب لك.",
+                heroDesc1: "من خلال بيب بيب، تستمتع بخدمة استئجار سكوترات ودراجات داخل المدينة بشكل يواكب نمط حياتك السريع.",
+                heroDesc2: "تنقّل سلس، وقت أقل يُهدر في الطريق، مريح لميزانيتك، ليكون خيارك الموثوق للمشاوير القصيرة.",
+                downloadFrom: "حمّله من",
+                getItFrom: "احصل عليه من",
+                mapDemo: "نموذج عرض الخريطة",
+                minutes: "دقيقة",
+                currency: "ريال",
+                unlockScooter: "استأجر مركبتك",
+                
+                // About Section
+                promoCardTitle:"ودّك بدخل يومي متكرر على مدار السنة؟",
+                promoCardDesc:"مع بيب بيب، هذا الدخل يصير واقع", 
+                promoCardLink:"انضم كشريكك الان",
+                aboutTitle: "بيب بيب",
+                aboutDesc1: "بيب بيب اليوم تقدّم منظومة متكاملة من الحلول التقنية اللي تجمع بين الأمان العالي، والكفاءة في التشغيل، والاهتمام بالاستدامة.",
+                aboutDesc2: "نطوّر تقنياتنا باستمرار عشان تكون التجربة أسهل، أوضح، وأقرب لاحتياج المستخدم اليومي، مع عناية دقيقة تفاصيل النظام. هدفنا إن يكون التنقّل داخل المدينة أكثر سلاسة وبحلول تقنية مدروسة تخدم المستخدم والبيئة في نفس الوقت.",
+                ourVehicles: "مركبات  بيب بيب",
+                
+                // Where We Are Section
+                whereWeAreTitle: "رحلة التوسع",
+                whereWeAreDesc1: "بدأت رحلة بيب بيب من المملكة العربية السعودية، واليوم نوسّع حضورنا بخطوات واثقة عشان نوصل لمدن ومجتمعات جديدة. نقدّم تجربة تنقّل تجمع بين المتعة، المرونة، وسهولة الاستخدام، لنخدم مختلف احتياجات التنقّل داخل المدينة بأسلوب عملي ومريح.",
+                whereWeAreDesc2: "نؤمن إن التنقّل الحديث جزء أساسي من جودة الحياة، عشان كذا نعمل باستمرار على تقديم حلول تساعد الناس يتحرّكون بسهولة، وتساهم في بناء مدن أكثر نشاطًا، وكفاءة، واستدامة.",
+                globalMap: "خريطة تواجد بيب بيب حول العالم",
+                
+                // Impact Section
+                impactTitle: "شغّل منظومة تنقّل حديثة في مدينتك بالشراكة مع بيب بيب",
+                impactDesc1: "نوفّر لك نموذج تشغيل متكامل يتيح لك الإسهام في تطوير خدمات التنقّل الحضري، ودعم بيئة أنظف، وحركة يومية أسهل للسكان، ضمن إطار تشغيلي واضح وفرص توسّع مدروسة.",
+                impactDesc2: "مع بيب بيب، تصبح الشريك المشغّل لخدمات السكوترات والدراجات في مدينتك، وتشارك في تقديم خدمة يحتاجها الناس يوميًا، وتفتح لنفسك باب دخل مستدام.",
+            
+                
+                // Who We Are Section
+                whoWeAreTitle: "من نحن",
+                whoWeAreDesc1: "بيب بيب هو تطبيق يقدّم خدمة استئجار السكوترات والدراجات داخل المدينة، ويهدف لتسهيل المشاوير اليومية بأسلوب عملي وسلس يناسب إيقاع الحياة السريع. نوفر وسيلة تنقّل مرنة للمشاوير القصيرة داخل الأحياء والطرق، بخدمة سهلة، واضحة، وفي متناول الجميع.",
+                whoWeAreDesc2: "رسالتنا في بيب بيب ترتكز على تنقّل أيسر، أثر بيئي أقل، وتجربة استخدام ممتعة. نعمل على تقديم حلول تساعد على تقليل الازدحام، وتدعم نمط حياة أكثر حيوية واستدامة داخل المدن، مع الحرص على أن تكون التجربة مريحة وآمنة في كل تفاصيلها.",
+                whoWeAreDesc3: "فريق بيب بيب يجمع بين الخبرة والشغف، ويعمل باستمرار على تطوير الخدمة وتحسين تجربة المستخدم، لنكون خيارًا موثوقًا للتنقّل اليومي، وجزءًا من أسلوب حياة حضري أكثر تنظيمًا وسلاسة.",
+                joinTeam: "انضم لفريق بيب بيب",
+                
+                // What Is Section
+                whatIsTitle: "ما هو بيب بيب؟",
+                whatIsDesc1: "بيب بيب هو تطبيق تنقل ذكي يتيح لك استئجار الدراجات والسكوترات الكهربائية بكل سهولة.",
+                whatIsDesc2: "تقدر تفتح التطبيق تلاقي اقرب مركبة وتبدا رحلتك فورا بدون اجراءات طويلة ولا انتظار",
+                whatIsDesc3: "التطبيق مصمم ليوفر تنقل سريع اقتصادي وصديق للبيئة داخل المدن والمناطق الحيوية",
+                fastFeature: "سريع وفوري",
+                fastDesc: "ابدأ رحلتك في ثوانٍ معدودة بدون إجراءات معقدة",
+                affordableFeature: "اقتصادي",
+                affordableDesc: "أسعار تنافسية تدفع فقط مقابل الدقائق التي تستخدمها",
+                ecoFeature: "صديق للبيئة",
+                ecoDesc: "سكوترات كهربائية تخفض البصمة الكربونية",
+                
+                // Features Section
+                whyChooseTitle: "لماذا تختار بيب بيب؟",
+                whyChooseDesc: "نجمع بين التكنولوجيا والراحة لإعادة تعريف التنقل الحضري.",
+                instantTitle: "فوري وسهل",
+                instantDesc: "امسح رمز الاستجابة السريعة وابدأ رحلتك في ثوانٍ. لا مفاتيح، لا متاعب، فقط سفر ذكي.",
+                affordableTitle: "تنقل اقتصادي",
+                affordableDesc2: "استمتع بأسعار تنافسية وادفع فقط مقابل الدقائق التي تركبها. مثالي للرحلات القصيرة.",
+                greenTitle: "تنقل أخضر",
+                greenDesc: "قلل من بصمتك الكربونية. تقدم سكوتراتنا الكهربائية بديلاً مستدامًا للسيارات.",
+                
+                // Process Section
+              processTitle: "ابدأ الركوب في 3 خطوات بسيطة",
+              processDesc: "تم تصميم تجربة بيب بيب لتحقيق أقصى كفاءة ومتعة.",
+              processStep1Title: "ابحث وامسح",
+              processStep1Desc: "حدد موقع أقرب سكوتر على خريطة التطبيق وامسح رمز الاستجابة السريعة لفتحه.",
+              processStep2Titl: "اركب واستمتع",
+              processStep2Desc: "تجول في المدينة مستمتعًا بالهواء النقي، وتأكد من اتباع جميع قوانين المرور.",
+              processStep3Title: "أوقف وأغلق",
+              processStep3Desc: "أوقف السكوتر بمسؤولية وانقر على \"إنهاء الرحلة\" في التطبيق لقفله.",
+
+            //   product slider
+            productSliderTitle: "تفاصيل المنتج",
+            productSliderDesc: "بيب بيب هو تطبيق تنقّل ذكي يتيح لك استئجار السكوترات والدراجات الكهربائية بسهولة.",
+                // Final CTA
+                readyTitle: "مستعد لبدء رحلتك؟",
+                readyDesc: "حمّل تطبيق بيب بيب اليوم وطوّر طريقة تنقلك في مدينتك.",
+                
+                // Footer
+                copyright: "&copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.",
+                privacy: "سياسة الخصوصية",
+                terms: "شروط الخدمة",
+                contact: "اتصل بنا",
+
+                recurringIncomeTitle: "ودّك بدخل يومي متكرر على مدار السنة؟",
+recurringIncomeSubtitle: "مع بيب بيب، هذا الدخل يصير واقع",
+joinPartner: "انضم كشريك الان",
+            },
+            en: {
+                // Header
+                menu: "Menu",
+                downloadApp: "Download App Now",
+                language: "Language",
+                
+                // Hero Section
+                heroTitle1: "Mobility ...",
+                heroTitle2: "Optimized",
+                "heroJoinNow": "Join as a partner now",
+                heroSubtitle: "If you need transportation, Beep beep is closer to you.",
+                heroDesc1: "With Beep beep, you enjoy scooter and bike rental services within the city in a way that keeps up with your fast-paced lifestyle.",
+                heroDesc2: "Smooth mobility, less time wasted on the road, budget-friendly, to be your reliable choice for short trips.",
+                downloadFrom: "Download on the",
+                getItFrom: "Get it on",
+                mapDemo: "Map Demo",
+                minutes: "minutes",
+                currency: "SAR",
+                unlockScooter: "Rent Your Vehicle",
+                
+                // About Section
+                promoCardTitle: "Looking for a recurring daily income all year round?",
+                promoCardDesc: "With Beep beep, this income becomes a reality",
+                promoCardLink: "Join as a partner now",
+                aboutTitle: "Beep Beep",
+                aboutDesc1: "Today, Beep beep offers a complete system of technical solutions that combine high safety, operational efficiency, and attention to sustainability.",
+                aboutDesc2: "We continuously develop our technologies to make the experience easier, clearer, and closer to the user's daily needs, with careful attention to system details. Our goal is to make urban mobility smoother with well-studied technical solutions that serve both the user and the environment.",
+                ourVehicles: "Beep Beep Vehicles",
+                
+                // Where We Are Section
+                whereWeAreTitle: "Expansion Journey",
+                whereWeAreDesc1: "Beep beep's journey started from Saudi Arabia, and today we're expanding our presence with confident steps to reach new cities and communities. We offer a mobility experience that combines enjoyment, flexibility, and ease of use, to serve various mobility needs within the city in a practical and comfortable way.",
+                whereWeAreDesc2: "We believe that modern mobility is an essential part of quality of life, which is why we continuously work to provide solutions that help people move easily and contribute to building more active, efficient, and sustainable cities.",
+                globalMap: "Beep beep Global Presence Map",
+                
+                // Impact Section
+                impactTitle: "Operate a Modern Mobility System in Your City in Partnership with Beep Beep",
+                impactDesc1: "We provide you with a comprehensive operational model that enables you to contribute to developing urban mobility services, supporting a cleaner environment, and easier daily movement for residents, within a clear operational framework and well-studied expansion opportunities.",
+                impactDesc2: "With Beep Beep, you become the operating partner for scooter and bike services in your city, participate in providing a service that people need daily, and open a sustainable income stream for yourself.",
+                applyNow: "Register Your Interest Now",
+                
+                // Who We Are Section
+                whoWeAreTitle: "Who We Are",
+                whoWeAreDesc1: "Beep beep is an app that provides scooter and bike rental services within the city, aiming to facilitate daily trips in a practical and smooth way that suits the fast pace of life. We provide flexible transportation for short trips within neighborhoods and roads, with an easy, clear, and accessible service.",
+                whoWeAreDesc2: "Our mission at Beep beep focuses on easier mobility, less environmental impact, and an enjoyable user experience. We work to provide solutions that help reduce congestion and support a more vibrant and sustainable lifestyle within cities, while ensuring the experience is comfortable and safe in all its details.",
+                whoWeAreDesc3: "The Beep beep team combines experience and passion, and continuously works to develop the service and improve the user experience, to be a reliable choice for daily mobility and part of a more organized and smooth urban lifestyle.",
+                joinTeam: "Join Beep beep Team",
+                
+                // What Is Section
+                whatIsTitle: "What is Beep beep?",
+                whatIsDesc1: "Beep beep is a smart mobility app that allows you to rent bikes and electric scooters with ease.",
+                whatIsDesc2: "You can open the app, find the nearest vehicle, and start your trip immediately without lengthy procedures or waiting.",
+                whatIsDesc3: "The app is designed to provide fast, economical, and eco-friendly transportation within cities and vital areas.",
+                fastFeature: "Fast & Instant",
+                fastDesc: "Start your trip in seconds without complicated procedures",
+                affordableFeature: "Affordable",
+                affordableDesc: "Competitive prices, pay only for the minutes you use",
+                ecoFeature: "Eco-Friendly",
+                ecoDesc: "Electric scooters that reduce carbon footprint",
+                
+                // Features Section
+                whyChooseTitle: "Why Choose Beep beep?",
+                whyChooseDesc: "We combine technology and comfort to redefine urban mobility.",
+                instantTitle: "Instant & Easy",
+                instantDesc: "Scan the QR code and start your trip in seconds. No keys, no hassle, just smart travel.",
+                affordableTitle: "Economical Mobility",
+                affordableDesc2: "Enjoy competitive prices and pay only for the minutes you ride. Perfect for short trips.",
+                greenTitle: "Green Mobility",
+                greenDesc: "Reduce your carbon footprint. Our electric scooters offer a sustainable alternative to cars.",
+                
+                // Process Section
+                processTitle: "Start Riding in 3 Simple Steps",
+                processDesc: "The Beep beep experience is designed for maximum efficiency and enjoyment.",
+                processStep1Title: "Find & Scan",
+                processStep1Desc: "Locate the nearest scooter on the app map and scan the QR code to unlock it.",
+                processStep2Title: "Ride & Enjoy",
+                processStep2Desc: "Cruise through the city enjoying the fresh air. Make sure to follow all local traffic laws.",
+                processStep3Title: "Park & Lock",
+                processStep3Desc: "Responsibly park the scooter in a designated area and tap 'End Ride' in the app to lock the scooter.",
+                
+                 //   product slider
+                 productSliderTitle: "Product Details",
+                 productSliderDesc: "Beep beep is a smart mobility app that allows you to easily rent electric scooters and bikes.",
+                // Final CTA
+                readyTitle: "Ready to Start Your Journey?",
+                readyDesc: "Download the Beep beep app today and transform your city mobility.",
+                
+                // Footer
+                copyright: "&copy; 2025 Beep beep App. All rights reserved.",
+                privacy: "Privacy Policy",
+                terms: "Terms of Service",
+                contact: "Contact Us",
+
+
+                recurringIncomeTitle: "Want a recurring daily income throughout the year?",
+recurringIncomeSubtitle: "With Beep beep, this income becomes a reality",
+joinPartner: "Join as a partner now",
+            },
+            de: {
+                // Header
+                menu: "Menü",
+                downloadApp: "Jetzt App herunterladen",
+                language: "Sprache",
+                
+                // Hero Section
+                heroTitle1: "Mobilität ...",
+                heroTitle2: "Optimiert",
+                heroSubtitle: "Wenn Sie Transport benötigen, ist Beep beep näher bei Ihnen.",
+                heroDesc1: "Mit Beep beep genießen Sie Roller- und Fahrradverleihdienste in der Stadt, die mit Ihrem schnellen Lebensstil Schritt halten.",
+                heroDesc2: "Reibungslose Mobilität, weniger Zeitverschwendung auf der Straße, budgetfreundlich, um Ihre zuverlässige Wahl für kurze Strecken zu sein.",
+                downloadFrom: "Laden Sie es aus dem",
+                getItFrom: "Holen Sie es bei",
+                mapDemo: "Karten-Demo",
+                minutes: "Minuten",
+                currency: "SAR",
+                unlockScooter: "Mieten Sie Ihr Fahrzeug",
+                
+                // About Section
+                aboutTitle: "Beep beep",
+                aboutDesc1: "Heute bietet Beep beep ein komplettes System technischer Lösungen, die hohe Sicherheit, Betriebseffizienz und Nachhaltigkeit kombinieren.",
+                aboutDesc2: "Wir entwickeln unsere Technologien kontinuierlich weiter, um die Erfahrung einfacher, klarer und näher an den täglichen Bedürfnissen der Benutzer zu machen, mit sorgfältiger Aufmerksamkeit für Systemdetails. Unser Ziel ist es, die urbane Mobilität mit gut durchdachten technischen Lösungen reibungsloser zu gestalten, die sowohl dem Benutzer als auch der Umwelt dienen.",
+                ourVehicles: "Beep beep Fahrzeuge",
+                
+                // Where We Are Section
+                whereWeAreTitle: "Expansionsreise",
+                whereWeAreDesc1: "Beep beeps Reise begann in Saudi-Arabien, und heute erweitern wir unsere Präsenz mit selbstbewussten Schritten, um neue Städte und Gemeinden zu erreichen. Wir bieten ein Mobilitätserlebnis, das Genuss, Flexibilität und Benutzerfreundlichkeit kombiniert, um verschiedene Mobilitätsbedürfnisse in der Stadt auf praktische und komfortable Weise zu bedienen.",
+                whereWeAreDesc2: "Wir glauben, dass moderne Mobilität ein wesentlicher Bestandteil der Lebensqualität ist, weshalb wir kontinuierlich daran arbeiten, Lösungen bereitzustellen, die Menschen helfen, sich leicht zu bewegen, und dazu beitragen, aktivere, effizientere und nachhaltigere Städte aufzubauen.",
+                globalMap: "Beep beep Globale Präsenzkarte",
+                
+                // Impact Section
+                impactTitle: "Betreiben Sie ein modernes Mobilitätssystem in Ihrer Stadt in Partnerschaft mit Beep beep",
+                impactDesc1: "Wir bieten Ihnen ein umfassendes Betriebsmodell, das es Ihnen ermöglicht, zur Entwicklung urbaner Mobilitätsdienste beizutragen, eine sauberere Umwelt zu unterstützen und eine einfachere tägliche Bewegung für Bewohner innerhalb eines klaren Betriebsrahmens und gut durchdachter Expansionsmöglichkeiten zu ermöglichen.",
+                impactDesc2: "Mit Beep beep werden Sie der Betriebspartner für Roller- und Fahrraddienste in Ihrer Stadt, beteiligen sich an der Bereitstellung eines Dienstes, den die Menschen täglich benötigen, und eröffnen sich eine nachhaltige Einnahmequelle.",
+                applyNow: "Registrieren Sie Ihr Interesse jetzt",
+                
+                // Who We Are Section
+                whoWeAreTitle: "Wer wir sind",
+                whoWeAreDesc1: "Beep beep ist eine App, die Roller- und Fahrradverleihdienste in der Stadt bereitstellt und darauf abzielt, tägliche Fahrten auf praktische und reibungslose Weise zu erleichtern, die dem schnellen Lebensrhythmus entspricht. Wir bieten flexible Transportmittel für kurze Fahrten innerhalb von Nachbarschaften und Straßen, mit einem einfachen, klaren und zugänglichen Service.",
+                whoWeAreDesc2: "Unsere Mission bei Beep beep konzentriert sich auf einfachere Mobilität, geringere Umweltauswirkungen und ein angenehmes Benutzererlebnis. Wir arbeiten daran, Lösungen bereitzustellen, die dazu beitragen, Staus zu reduzieren und einen lebendigeren und nachhaltigeren Lebensstil in Städten zu unterstützen, wobei wir sicherstellen, dass die Erfahrung in allen Details komfortabel und sicher ist.",
+                whoWeAreDesc3: "Das Beep beep-Team kombiniert Erfahrung und Leidenschaft und arbeitet kontinuierlich daran, den Service zu entwickeln und das Benutzererlebnis zu verbessern, um eine zuverlässige Wahl für die tägliche Mobilität und Teil eines organisierten und reibungslosen urbanen Lebensstils zu sein.",
+                joinTeam: "Werden Sie Teil des Beep beep Teams",
+                
+                // What Is Section
+                whatIsTitle: "Was ist Beep beep?",
+                whatIsDesc1: "Beep beep ist eine intelligente Mobilitäts-App, mit der Sie problemlos Fahrräder und Elektroroller mieten können.",
+                whatIsDesc2: "Sie können die App öffnen, das nächste Fahrzeug finden und Ihre Fahrt sofort ohne lange Verfahren oder Wartezeiten starten.",
+                whatIsDesc3: "Die App wurde entwickelt, um schnellen, wirtschaftlichen und umweltfreundlichen Transport in Städten und wichtigen Gebieten zu bieten.",
+                fastFeature: "Schnell & Sofort",
+                fastDesc: "Starten Sie Ihre Fahrt in Sekunden ohne komplizierte Verfahren",
+                affordableFeature: "Erschwinglich",
+                affordableDesc: "Wettbewerbsfähige Preise, zahlen Sie nur für die Minuten, die Sie nutzen",
+                ecoFeature: "Umweltfreundlich",
+                ecoDesc: "Elektroroller, die den CO2-Fußabdruck reduzieren",
+                
+                // Features Section
+                whyChooseTitle: "Warum Beep beep wählen?",
+                whyChooseDesc: "Wir kombinieren Technologie und Komfort, um urbane Mobilität neu zu definieren.",
+                instantTitle: "Sofort & Einfach",
+                instantDesc: "Scannen Sie den QR-Code und starten Sie Ihre Fahrt in Sekunden. Keine Schlüssel, kein Ärger, nur intelligentes Reisen.",
+                affordableTitle: "Wirtschaftliche Mobilität",
+                affordableDesc2: "Genießen Sie wettbewerbsfähige Preise und zahlen Sie nur für die Minuten, die Sie fahren. Perfekt für kurze Strecken.",
+                greenTitle: "Grüne Mobilität",
+                greenDesc: "Reduzieren Sie Ihren CO2-Fußabdruck. Unsere Elektroroller bieten eine nachhaltige Alternative zu Autos.",
+                
+                // Process Section
+                processTitle: "Starten Sie die Fahrt in 3 einfachen Schritten",
+                processDesc: "Die Beep beep Erfahrung ist für maximale Effizienz und Freude konzipiert.",
+                step1Title: "Finden & Scannen",
+                step1Desc: "Lokalisieren Sie den nächsten Roller auf der App-Karte und scannen Sie den QR-Code, um ihn zu entsperren.",
+                step2Title: "Fahren & Genießen",
+                step2Desc: "Cruisen Sie durch die Stadt und genießen Sie die frische Luft. Stellen Sie sicher, dass Sie alle lokalen Verkehrsgesetze befolgen.",
+                step3Title: "Parken & Schließen",
+                step3Desc: "Parken Sie den Roller verantwortungsbewusst in einem ausgewiesenen Bereich und tippen Sie in der App auf 'Fahrt beenden', um den Roller zu verschließen.",
+                
+                // Final CTA
+                readyTitle: "Bereit für Ihre Reise?",
+                readyDesc: "Laden Sie die Beep beep App noch heute herunter und transformieren Sie Ihre städtische Mobilität.",
+                
+                // Footer
+                copyright: "&copy; 2025 Beep beep App. Alle Rechte vorbehalten.",
+                privacy: "Datenschutzrichtlinie",
+                terms: "Nutzungsbedingungen",
+                contact: "Kontaktieren Sie uns",
+
+
+                recurringIncomeTitle: "Wollen Sie ein wiederkehrendes tägliches Einkommen das ganze Jahr über?",
+recurringIncomeSubtitle: "Mit Beep beep wird dieses Einkommen Realität",
+joinPartner: "Jetzt als Partner beitreten",
+            },
+            es: {
+                // Header
+                menu: "Menú",
+                downloadApp: "Descargar App Ahora",
+                language: "Idioma",
+                
+                // Hero Section
+                heroTitle1: "Movilidad ...",
+                heroTitle2: "Optimizada",
+                heroSubtitle: "Si necesitas transporte, Beep beep está más cerca de ti.",
+                heroDesc1: "Con Beep beep, disfrutas de servicios de alquiler de scooters y bicicletas dentro de la ciudad de una manera que se adapta a tu estilo de vida acelerado.",
+                heroDesc2: "Movilidad fluida, menos tiempo perdido en el camino, económico, para ser tu opción confiable para viajes cortos.",
+                downloadFrom: "Descárgalo en",
+                getItFrom: "Consíguelo en",
+                mapDemo: "Demostración de Mapa",
+                minutes: "minutos",
+                currency: "SAR",
+                unlockScooter: "Alquila Tu Vehículo",
+                
+                // About Section
+                aboutTitle: "Beep beep",
+                aboutDesc1: "Hoy, Beep beep ofrece un sistema completo de soluciones técnicas que combinan alta seguridad, eficiencia operativa y atención a la sostenibilidad.",
+                aboutDesc2: "Desarrollamos continuamente nuestras tecnologías para hacer la experiencia más fácil, clara y cercana a las necesidades diarias del usuario, con atención cuidadosa a los detalles del sistema. Nuestro objetivo es hacer la movilidad urbana más fluida con soluciones técnicas bien estudiadas que sirvan tanto al usuario como al medio ambiente.",
+                ourVehicles: "Vehículos Beep beep",
+                
+                // Where We Are Section
+                whereWeAreTitle: "Viaje de Expansión",
+                whereWeAreDesc1: "El viaje de Beep beep comenzó desde Arabia Saudita, y hoy estamos expandiendo nuestra presencia con pasos seguros para llegar a nuevas ciudades y comunidades. Ofrecemos una experiencia de movilidad que combina disfrute, flexibilidad y facilidad de uso, para servir diversas necesidades de movilidad dentro de la ciudad de manera práctica y cómoda.",
+                whereWeAreDesc2: "Creemos que la movilidad moderna es una parte esencial de la calidad de vida, por lo que trabajamos continuamente para proporcionar soluciones que ayuden a las personas a moverse fácilmente y contribuyan a construir ciudades más activas, eficientes y sostenibles.",
+                globalMap: "Mapa de Presencia Global de Beep beep",
+                
+                // Impact Section
+                impactTitle: "Opera un Sistema de Movilidad Moderno en Tu Ciudad en Asociación con Beep beep",
+                impactDesc1: "Te proporcionamos un modelo operativo integral que te permite contribuir al desarrollo de servicios de movilidad urbana, apoyar un entorno más limpio y un movimiento diario más fácil para los residentes, dentro de un marco operativo claro y oportunidades de expansión bien estudiadas.",
+                impactDesc2: "Con Beep beep, te conviertes en el socio operativo de servicios de scooters y bicicletas en tu ciudad, participas en proporcionar un servicio que las personas necesitan diariamente y abres una fuente de ingresos sostenible para ti mismo.",
+                applyNow: "Registra Tu Interés Ahora",
+                
+                // Who We Are Section
+                whoWeAreTitle: "Quiénes Somos",
+                whoWeAreDesc1: "Beep beep es una aplicación que proporciona servicios de alquiler de scooters y bicicletas dentro de la ciudad, con el objetivo de facilitar los viajes diarios de manera práctica y fluida que se adapte al ritmo acelerado de la vida. Proporcionamos transporte flexible para viajes cortos dentro de vecindarios y carreteras, con un servicio fácil, claro y accesible.",
+                whoWeAreDesc2: "Nuestra misión en Beep beep se centra en una movilidad más fácil, menor impacto ambiental y una experiencia de usuario agradable. Trabajamos para proporcionar soluciones que ayuden a reducir la congestión y apoyen un estilo de vida más vibrante y sostenible dentro de las ciudades, asegurando que la experiencia sea cómoda y segura en todos sus detalles.",
+                whoWeAreDesc3: "El equipo de Beep beep combina experiencia y pasión, y trabaja continuamente para desarrollar el servicio y mejorar la experiencia del usuario, para ser una opción confiable para la movilidad diaria y parte de un estilo de vida urbano más organizado y fluido.",
+                joinTeam: "Únete al Equipo de Beep beep",
+                
+                // What Is Section
+                whatIsTitle: "¿Qué es Beep beep?",
+                whatIsDesc1: "Beep beep es una aplicación de movilidad inteligente que te permite alquilar bicicletas y scooters eléctricos con facilidad.",
+                whatIsDesc2: "Puedes abrir la aplicación, encontrar el vehículo más cercano y comenzar tu viaje inmediatamente sin procedimientos largos ni esperas.",
+                whatIsDesc3: "La aplicación está diseñada para proporcionar transporte rápido, económico y ecológico dentro de ciudades y áreas vitales.",
+                fastFeature: "Rápido e Instantáneo",
+                fastDesc: "Comienza tu viaje en segundos sin procedimientos complicados",
+                affordableFeature: "Asequible",
+                affordableDesc: "Precios competitivos, paga solo por los minutos que usas",
+                ecoFeature: "Ecológico",
+                ecoDesc: "Scooters eléctricos que reducen la huella de carbono",
+                
+                // Features Section
+                whyChooseTitle: "¿Por Qué Elegir Beep beep?",
+                whyChooseDesc: "Combinamos tecnología y comodidad para redefinir la movilidad urbana.",
+                instantTitle: "Instantáneo y Fácil",
+                instantDesc: "Escanea el código QR y comienza tu viaje en segundos. Sin llaves, sin complicaciones, solo viajes inteligentes.",
+                affordableTitle: "Movilidad Económica",
+                affordableDesc2: "Disfruta de precios competitivos y paga solo por los minutos que conduces. Perfecto para viajes cortos.",
+                greenTitle: "Movilidad Verde",
+                greenDesc: "Reduce tu huella de carbono. Nuestros scooters eléctricos ofrecen una alternativa sostenible a los coches.",
+                
+                // Process Section
+                processTitle: "Comienza a Conducir en 3 Pasos Sencillos",
+                processDesc: "La experiencia Beep beep está diseñada para máxima eficiencia y disfrute.",
+                step1Title: "Encuentra y Escanea",
+                step1Desc: "Localiza el scooter más cercano en el mapa de la aplicación y escanea el código QR para desbloquearlo.",
+                step2Title: "Conduce y Disfruta",
+                step2Desc: "Recorre la ciudad disfrutando del aire fresco. Asegúrate de seguir todas las leyes de tráfico locales.",
+                step3Title: "Estaciona y Cierra",
+                step3Desc: "Estaciona el scooter responsablemente en un área designada y toca 'Finalizar Viaje' en la aplicación para bloquear el scooter.",
+                
+                // Final CTA
+                readyTitle: "¿Listo para Comenzar Tu Viaje?",
+                readyDesc: "Descarga la aplicación Beep beep hoy y transforma tu movilidad urbana.",
+                
+                // Footer
+                copyright: "&copy; 2025 Aplicación Beep beep. Todos los derechos reservados.",
+                privacy: "Política de Privacidad",
+                terms: "Términos de Servicio",
+                contact: "Contáctanos",
+
+
+                recurringIncomeTitle: "¿Quieres un ingreso diario recurrente durante todo el año?",
+recurringIncomeSubtitle: "Con Beep beep, este ingreso se hace realidad",
+joinPartner: "Únete como socio ahora",
+            }
+        };
+
+        // Language configuration
+        const languageConfig = {
+            ar: { flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png", dir: "rtl", name: "العربية" },
+            en: { flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png", dir: "ltr", name: "English" },
+            de: { flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/DEU.png", dir: "ltr", name: "Deutsch" },
+            es: { flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/ESP.png", dir: "ltr", name: "Español" }
+        };
+
+        // Current language
+        let currentLang = 'ar';
+
+        // Function to change language
+ function changeLanguage(lang) {
+    if (!translations[lang]) return;
+
+    currentLang = lang;
+
+    // 🔤 ترجمة كل النصوص
+    document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang][key]) {
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.value = translations[lang][key];
+            } else {
+                element.innerHTML = translations[lang][key];
+            }
+        }
+    });
+
+    // 🔄 تغيير الاتجاه
+    if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+    } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', lang);
+    }
+
+    // 🌍 تحديث اللغة الحالية
+    const config = languageConfig[lang];
+    document.getElementById('currentLangFlag').src = config.flag;
+    document.getElementById('currentLangCode').textContent = lang.toUpperCase();
+
+    // 💾 حفظ الاختيار
+    localStorage.setItem('preferredLanguage', lang);
+
+    // ✅ قفل الـ dropdown
+    const langMenu = document.getElementById('langMenu');
+    const langButton = document.getElementById('langButton');
+
+    langMenu?.classList.add('hidden');
+    langButton?.setAttribute('aria-expanded', 'false');
+    langButton?.classList.remove('active');
+}
+
+        // Initialize AOS (Animate On Scroll)
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Initialize GSAP with ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Add GSAP animations for more advanced effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load saved language preference or default to Arabic
+            const savedLang = localStorage.getItem('preferredLanguage') || 'ar';
+            changeLanguage(savedLang);
+            
+            // Language option click handlers
+            document.querySelectorAll('.lang-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const lang = option.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+
+            // Mobile language option click handlers
+            document.querySelectorAll('.lang-option-mobile').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const lang = option.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+
+            // Animate elements with GSAP
+            gsap.utils.toArray('.hover-3d').forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    gsap.to(element, {
+                        duration: 0.5,
+                        y: -10,
+                        rotationX: 5,
+                        ease: "power2.out"
+                    });
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    gsap.to(element, {
+                        duration: 0.5,
+                        y: 0,
+                        rotationX: 0,
+                        ease: "power2.out"
+                    });
+                });
+            });
+
+            // Magnetic button effect
+            gsap.utils.toArray('.magnetic-btn').forEach(button => {
+                button.addEventListener('mousemove', (e) => {
+                    const x = e.offsetX - button.clientWidth / 2;
+                    const y = e.offsetY - button.clientHeight / 2;
+                    
+                    gsap.to(button, {
+                        duration: 0.3,
+                        x: x * 0.1,
+                        y: y * 0.1,
+                        ease: "power2.out"
+                    });
+                });
+                
+                button.addEventListener('mouseleave', () => {
+                    gsap.to(button, {
+                        duration: 0.3,
+                        x: 0,
+                        y: 0,
+                        ease: "power2.out"
+                    });
+                });
+            });
+
+            // --- Language Dropdown Functionality ---
+            const langButton = document.getElementById('langButton');
+            const langMenu = document.getElementById('langMenu');
+
+            if (langButton && langMenu) {
+                langButton.addEventListener('click', () => {
+                    const isExpanded = langButton.getAttribute('aria-expanded') === 'true' || false;
+                    langButton.setAttribute('aria-expanded', !isExpanded);
+                    langMenu.classList.toggle('hidden');
+                    langButton.classList.toggle('active');
+                });
+
+                // Close dropdown if user clicks outside
+                document.addEventListener('click', (event) => {
+                    if (!langButton.contains(event.target) && !langMenu.contains(event.target)) {
+                        langButton.setAttribute('aria-expanded', 'false');
+                        langMenu.classList.add('hidden');
+                        langButton.classList.remove('active');
+                    }
+                });
+            }
+
+            // --- Mobile Menu Toggle Functionality ---
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+    <script>
+   new Swiper(".product-swiper", {
+    loop: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    spaceBetween: 30,
+
+    effect: "coverflow",
+    coverflowEffect: {
+      rotate: 0,
+      stretch: -60,
+      depth: 200,
+      modifier: 1,
+      slideShadows: false,
+    },
+
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+
+    breakpoints: {
+      0: {
+        slidesPerView: 1.1,
+        spaceBetween: 16,
+      },
+      768: {
+        slidesPerView: "auto",
+      },
+    },
+  });
+    </script>
+</body>
+</html>

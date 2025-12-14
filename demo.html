@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بيب بيب - تجربة استئجار السكوتر والدراجة</title>
+    <link rel="icon" href="logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="shortcut icon" href="logo.png" type="image/png" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animate.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- QRCode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-yellow": "#fdd703",
+              "light-yellow": "#fef2ab",
+              "dark-yellow": "#ae9000",
+              "deep-black": "#0a0a0a",
+            },
+            fontFamily: {
+              jannat: ["Vazirmatn", "sans-serif"],
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              "pulse-glow": "pulse-glow 1s ease-in-out infinite alternate",
+            },
+            keyframes: {
+              float: {
+                "0%,100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              "pulse-glow": {
+                "0%": {
+                  boxShadow:
+                    "0 0 5px #fdd703,0 0 10px #fdd703,0 0 15px #fdd703",
+                },
+                "100%": {
+                  boxShadow:
+                    "0 0 10px #fdd703,0 0 20px #fdd703,0 0 30px #fdd703",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+      .screen {
+        display: none;
+      }
+      .screen.active {
+        display: block;
+      }
+
+      /* Scan line animation */
+      @keyframes scan {
+        0% {
+          top: 0;
+        }
+        100% {
+          top: 100%;
+        }
+      }
+      .scan-animate {
+        animation: scan 1s linear infinite;
+      }
+    </style>
+  </head>
+
+  <body class="bg-light-yellow font-jannat text-center">
+    <!-- HEADER -->
+    <header class="bg-primary-yellow p-6 shadow-md">
+      <img
+        src="logo.png"
+        class="mx-auto h-20 animate-pulse"
+        alt="Beep Beep Logo"
+      />
+    </header>
+
+    <!-- SCREEN 1: اختيار المركبة -->
+    <section
+      id="vehicle"
+      class="screen active max-w-6xl mx-auto mt-10 p-5"
+      data-aos="fade-up"
+    >
+      <h2
+        class="text-4xl font-extrabold mb-10 animate__animated animate__fadeInDown"
+      >
+        اختر المركبة
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full">
+        <div
+          onclick="selectVehicle('دراجة')"
+          class="bg-white rounded-2xl shadow-lg p-6 cursor-pointer animate__animated animate__fadeInRight animate__delay-1s hover:scale-105 transition-transform duration-300"
+          data-aos="zoom-in"
+        >
+          <img
+            src="/assets/img/bike.png"
+            class="mx-auto w-40 h-40 object-contain mb-4 animate-float"
+          />
+          <p
+            class="text-2xl font-bold animate__animated animate__fadeInUp animate__delay-2s"
+          >
+            دراجة
+          </p>
+        </div>
+        <div
+          onclick="selectVehicle('سكوتر')"
+          class="bg-white rounded-2xl shadow-lg p-6 cursor-pointer animate__animated animate__fadeInLeft animate__delay-1s hover:scale-105 transition-transform duration-300"
+          data-aos="zoom-in"
+          data-aos-delay="100"
+        >
+          <img
+            src="/assets/img/scooter.jpeg"
+            class="mx-auto w-40 h-40 object-contain mb-4 animate-float"
+          />
+          <p
+            class="text-2xl font-bold animate__animated animate__fadeInUp animate__delay-2s"
+          >
+            سكوتر
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: تحديد الوقت -->
+    <section id="time" class="screen max-w-xl mx-auto mt-10 p-5">
+      <h2
+        class="text-4xl font-extrabold mb-6 animate__animated animate__fadeInDown"
+      >
+        حدد وقت الاستخدام
+      </h2>
+      <input
+        id="minutes"
+        type="number"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        min="1"
+        placeholder="عدد الدقائق"
+        class="border-2 border-gray-300 rounded-full px-6 py-3 text-2xl text-center w-64 mb-6 animate__animated animate__fadeInUp animate__delay-1s"
+      />
+      <p
+        class="text-2xl mb-6 animate__animated animate__fadeInUp animate__delay-1s"
+      >
+        السعر الإجمالي: <span id="price">0</span> ريال
+      </p>
+      <button
+        id="goScanBtn"
+        onclick="go('scan')"
+        disabled
+        class="btn bg-primary-yellow hover:bg-dark-yellow px-10 py-4 text-2xl rounded-full font-bold transition-transform transform hover:-translate-y-1 animate__animated animate__pulse animate__infinite disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        انتقل لمسح QR
+      </button>
+    </section>
+
+    <!-- SCREEN 3: QR Code -->
+    <section
+      id="scan"
+      class="screen max-w-xl mx-auto mt-10 p-5"
+      data-aos="fade-up"
+    >
+      <h2
+        class="text-4xl font-extrabold mb-6 animate__animated animate__fadeInDown"
+      >
+        مسح الباركود
+      </h2>
+      <div class="relative w-64 h-64 mx-auto mb-6">
+        <!-- QR Code Canvas -->
+        <canvas
+          id="qrcode"
+          class="absolute top-0 left-0 w-64 h-64 animate__animated animate__zoomIn"
+        ></canvas>
+
+        <!-- Scan Line -->
+        <div
+          class="absolute w-full h-2 bg-red-500 scan-animate animate__animated animate__fadeIn animate__infinite"
+        ></div>
+      </div>
+
+      <button
+        onclick="confirm()"
+        class="btn bg-primary-yellow hover:bg-dark-yellow px-10 py-4 text-2xl rounded-full font-bold transition-transform transform hover:-translate-y-1 animate__animated animate__fadeInUp animate__delay-1s"
+      >
+        تم المسح بنجاح
+      </button>
+    </section>
+
+    <!-- SCREEN 4: تأكيد الرحلة -->
+    <section
+      id="confirm"
+      class="screen max-w-xl mx-auto mt-10 p-5"
+      data-aos="fade-up"
+    >
+      <h2
+        class="text-4xl font-extrabold mb-6 animate__animated animate__fadeInDown"
+      >
+        تأكيد الرحلة
+      </h2>
+
+      <p
+        class="text-2xl font-semibold animate__animated animate__fadeIn animate__delay-1s"
+      >
+        المركبة: <span id="cVehicle"></span>
+      </p>
+      <p
+        class="text-2xl font-semibold animate__animated animate__fadeIn animate__delay-1s"
+      >
+        الدقائق: <span id="cMinutes"></span>
+      </p>
+      <p
+        class="text-2xl font-semibold animate__animated animate__fadeIn animate__delay-1s"
+      >
+        السعر: <span id="cPrice"></span> ريال
+      </p>
+
+      <button
+        onclick="go('end')"
+        class="btn bg-primary-yellow hover:bg-dark-yellow px-10 py-4 text-2xl rounded-full font-bold transition-transform transform hover:-translate-y-1 mt-6 animate__animated animate__fadeInUp animate__delay-2s"
+      >
+        ابدأ الرحلة الآن
+      </button>
+    </section>
+
+    <!-- SCREEN 5: نهاية الرحلة -->
+    <section
+      id="end"
+      class="screen max-w-xl mx-auto mt-10 mb-10 p-5"
+      data-aos="fade-up"
+    >
+      <h2
+        class="text-4xl font-extrabold mb-6 animate__animated animate__fadeInDown"
+      >
+        انتهت الرحلة
+      </h2>
+
+      <p
+        class="text-2xl animate__animated animate__fadeIn animate__delay-1s font-semibold"
+      >
+        الوقت: <span id="eMinutes"></span> دقيقة
+      </p>
+      <p
+        class="text-2xl animate__animated animate__fadeIn animate__delay-1s font-semibold"
+      >
+        السعر النهائي: <span id="ePrice"></span> ريال
+      </p>
+
+      <h3
+        class="text-3xl font-bold mt-4 animate__animated animate__heartBeat animate__infinite animate__delay-2s"
+      >
+        شكراً لاستخدامك بيب بيب 💛
+      </h3>
+    </section>
+
+    <script>
+      let vehicle = "",
+        minutes = 0,
+        price = 0;
+
+      function go(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+
+        // QR code generate when reaching scan screen
+        if (id === "scan") {
+          // الرابط اللي هيفتح بعد المسح
+          const qrData = `https://beepbeepksa.com?vehicle=${encodeURIComponent(
+            vehicle
+          )}&minutes=${minutes}&price=${price}`;
+
+          QRCode.toCanvas(
+            document.getElementById("qrcode"),
+            qrData,
+            { width: 256 },
+            function (error) {
+              if (error) console.error(error);
+            }
+          );
+        }
+      }
+
+      function selectVehicle(v) {
+        vehicle = v;
+        go("time");
+      }
+
+      const minutesInput = document.getElementById("minutes");
+      const goScanBtn = document.getElementById("goScanBtn");
+      const priceSpan = document.getElementById("price");
+
+      minutesInput.addEventListener("input", () => {
+        // منع أي حرف غير رقم
+        minutesInput.value = minutesInput.value.replace(/[^0-9]/g, "");
+
+        // حدّث المتغيرات العالمية
+        minutes = parseInt(minutesInput.value) || 0;
+        price = minutes * 1;
+
+        // حدّث السعر في الشاشة
+        priceSpan.innerText = price;
+
+        // تفعيل الزر فقط لو المستخدم كتب عدد أكبر من صفر
+        goScanBtn.disabled = !minutes || minutes <= 0;
+      });
+
+      function confirm() {
+        document.getElementById("cVehicle").innerText = vehicle;
+        document.getElementById("cMinutes").innerText = minutes;
+        document.getElementById("cPrice").innerText = price;
+        document.getElementById("eMinutes").innerText = minutes;
+        document.getElementById("ePrice").innerText = price;
+        go("confirm");
+      }
+    </script>
+  </body>
+</html>

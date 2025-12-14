@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بيب بيب - تطبيق التنقل الذكي</title>
+    <link rel="icon" href="logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="shortcut icon" href="logo.png" type="image/png" />
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <!-- Animate.css for additional animations -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <!-- Google Fonts for Arabic and English -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Configure Tailwind for custom colors/theme -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-yellow": "#fdd703",
+              "light-yellow": "#fef2ab",
+              "dark-yellow": "#ae9000",
+              "primary-black": "#000000",
+              "dark-green": "#5b532c",
+              "accent-green": "#63a361",
+              "luxury-gold": "#d4af37",
+              "deep-black": "#0a0a0a",
+            },
+            fontFamily: {
+              jannat: ["Tajawal", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              "pulse-glow": "pulse-glow 2s ease-in-out infinite alternate",
+              "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+              "slide-in-right": "slideInRight 0.8s ease-out forwards",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              "pulse-glow": {
+                "0%": {
+                  boxShadow:
+                    "0 0 5px #fdd703, 0 0 10px #fdd703, 0 0 15px #fdd703",
+                },
+                "100%": {
+                  boxShadow:
+                    "0 0 10px #fdd703, 0 0 20px #fdd703, 0 0 30px #fdd703",
+                },
+              },
+              fadeInUp: {
+                "0%": { opacity: "0", transform: "translateY(30px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideInRight: {
+                "0%": { opacity: "0", transform: "translateX(30px)" },
+                "100%": { opacity: "1", transform: "translateX(0)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --font_7: normal normal normal 20px / 1.4em "Tajawal", sans-serif;
+      }
+
+      body {
+        font-family: "Tajawal", sans-serif;
+        background-color: #fef2ab;
+        overflow-x: hidden;
+      }
+
+      .font-jannat {
+        font-family: "Tajawal", sans-serif;
+      }
+
+      .mail-icon svg {
+        transition: all 0.3s ease;
+        fill: currentColor;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .lang-dropdown.active .chevron-down {
+        transform: rotate(180deg);
+      }
+
+      .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        right: 0;
+        width: 60px;
+        height: 3px;
+        background-color: #fdd703;
+      }
+
+      .hero-bg {
+        background: linear-gradient(135deg, #fdd703 0%, #ae9000 100%);
+      }
+
+      .impact-section {
+        background-color: #5b532c;
+        color: white;
+      }
+
+      /* Luxury styling */
+      .luxury-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      }
+
+      .luxury-border {
+        border: 1px solid rgba(253, 215, 3, 0.3);
+      }
+
+      .gold-gradient {
+        background: linear-gradient(
+          135deg,
+          #fdd703 0%,
+          #d4af37 50%,
+          #ae9000 100%
+        );
+      }
+
+      .text-gold {
+        color: #d4af37;
+      }
+
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite alternate;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #fdd703, #ae9000);
+        border-radius: 10px;
+      }
+
+      /* Hide elements initially for animation */
+      [data-aos] {
+        opacity: 0;
+        transition-property: transform, opacity;
+      }
+
+      /* Custom animations */
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      .shimmer {
+        animation: shimmer 3s infinite linear;
+        background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(255, 255, 255, 0.4) 50%,
+          transparent 100%
+        );
+        background-size: 1000px 100%;
+      }
+
+      /* Parallax effect */
+      .parallax {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      /* 3D transform on hover */
+      .hover-3d {
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+      }
+
+      .hover-3d:hover {
+        transform: translateY(-10px) rotateX(5deg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Magnetic button effect */
+      .magnetic-btn {
+        transition: transform 0.3s ease;
+      }
+
+      .magnetic-btn:hover {
+        transform: scale(1.05);
+      }
+
+      /* Custom styling for the new hero section */
+      .hero-text-gradient {
+        background: linear-gradient(135deg, #000000 0%, #5b532c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .highlight-text {
+        position: relative;
+        display: inline-block;
+      }
+
+      .highlight-text::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 30%;
+        background-color: rgba(253, 215, 3, 0.3);
+        z-index: -1;
+        transform: skewX(-15deg);
+      }
+
+      /* Safety Test Section Styles */
+      .safety-test-section {
+        background: linear-gradient(135deg, #fef2ab 0%, #fdd703 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .safety-test-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ae9000' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+      }
+
+      .safety-test-card {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(253, 215, 3, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .safety-test-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .scooter-image {
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        transition: all 0.5s ease;
+      }
+
+      .scooter-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      .test-button {
+        background: linear-gradient(135deg, #000000 0%, #5b532c 100%);
+        color: white;
+        border-radius: 50px;
+        padding: 12px 30px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .test-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #5b532c 0%, #000000 100%);
+      }
+
+      .highlight-offer {
+        background: linear-gradient(135deg, #fdd703 0%, #d4af37 100%);
+        color: #000;
+        border-radius: 10px;
+        padding: 10px 15px;
+        font-weight: 700;
+        display: inline-block;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(253, 215, 3, 0.3);
+      }
+
+      /* Safety Information Section Styles */
+      .safety-info-card {
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .safety-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Mobile-specific fixes */
+      @media (max-width: 767px) {
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .safety-test-card {
+          padding: 1.5rem !important;
+        }
+
+        .safety-info-card {
+          padding: 1.5rem !important;
+        }
+
+        .hero-text-gradient {
+          font-size: 2.25rem !important;
+        }
+
+        .test-button {
+          width: 100%;
+          text-align: center;
+        }
+
+        .highlight-offer {
+          text-align: center;
+          width: 100%;
+        }
+
+        /* Fix for mobile menu */
+        #mobileMenu {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        /* Ensure no horizontal overflow */
+        body,
+        html {
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+
+        /* Fix for image positioning */
+        .scooter-image {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+
+      /* Additional responsive fixes */
+      @media (max-width: 640px) {
+        .px-4 {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        .px-6 {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+
+        .px-8 {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+
+        /* Ensure all containers have proper padding */
+        .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        /* Fix for header padding */
+        header .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        /* Fix for footer padding */
+        footer .container {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+
+        /* Center align text on mobile */
+        .text-center-mobile {
+          text-align: center;
+        }
+
+        /* Adjust font sizes for mobile */
+        h2 {
+          font-size: 1.875rem !important;
+        }
+
+        h3 {
+          font-size: 1.5rem !important;
+        }
+
+        p {
+          font-size: 1rem !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light-yellow font-jannat" dir="rtl">
+    <!-- Header Section -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-lg">
+      <div
+        class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center"
+      >
+        <!-- Logo/Brand Link -->
+        <a href="/" class="flex items-center" aria-label="بيب بيب الرئيسية">
+          <div class="relative">
+            <div
+              class="absolute -inset-1 bg-primary-yellow rounded-full blur opacity-30"
+            ></div>
+            <img
+              src="logo.png"
+              alt="لوجو بيب بيب"
+              class="h-16 w-16 object-contain relative"
+            />
+          </div>
+        </a>
+
+        <!-- Right side: Buttons and Language Selector -->
+        <div class="hidden md:flex items-center space-x-4 space-x-reverse">
+          <!-- Language Selector Dropdown -->
+          <div class="relative inline-block text-left">
+            <button
+              id="langButton"
+              class="lang-dropdown inline-flex justify-center items-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-all duration-300 magnetic-btn"
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              <img
+                id="currentLangFlag"
+                src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png"
+                alt="Arabic Flag"
+                class="h-4 w-4 ml-1 rounded-full"
+              />
+              <span id="currentLangCode">AR</span>
+              <svg
+                class="-ml-1 mr-2 h-4 w-4 transition-transform duration-200 chevron-down"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.97l3.71-3.74a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="langMenu"
+              class="hidden absolute right-0 mt-2 w-40 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none luxury-card"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="langButton"
+              tabindex="-1"
+            >
+              <!-- Language options -->
+              <div class="py-1" role="none">
+                <a
+                  href="#"
+                  class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                  data-lang="ar"
+                >
+                  <img
+                    src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png"
+                    alt="Arabic Flag"
+                    class="h-4 w-4 ml-2 rounded-full"
+                  />
+                  AR
+                </a>
+                <a
+                  href="#"
+                  class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                  data-lang="en"
+                >
+                  <img
+                    src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png"
+                    alt="English Flag"
+                    class="h-4 w-4 ml-2 rounded-full"
+                  />
+                  EN
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button
+            id="mobileMenuButton"
+            class="text-primary-black p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+            aria-label="Open menu"
+          >
+            <svg
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobileMenu"
+        class="hidden md:hidden border-t border-gray-100 pb-4"
+      >
+        <div class="flex flex-col space-y-2 px-4 pt-2">
+          <!-- Simple language link/placeholder for mobile -->
+          <div class="px-3 py-2 text-sm font-medium text-gray-700 rounded-lg">
+            <span data-translate="language">اللغة:</span>
+            <span id="mobileCurrentLang">العربية</span>
+          </div>
+
+          <!-- Language options for mobile -->
+          <div class="flex flex-wrap gap-2 px-3">
+            <button
+              class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full"
+              data-lang="ar"
+            >
+              العربية
+            </button>
+            <button
+              class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full"
+              data-lang="en"
+            >
+              English
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Safety Test Section -->
+      <section class="safety-test-section py-12 md:py-16 px-4">
+        <div class="container mx-auto">
+          <div
+            class="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-10"
+          >
+            <!-- Text Content -->
+            <div class="lg:w-1/2 w-full" data-aos="fade-right">
+              <div class="safety-test-card p-6 md:p-8 lg:p-10">
+                <h2
+                  class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-black mb-4 md:mb-6 leading-tight text-center-mobile"
+                  data-translate="safetyTestTitle"
+                >
+                  تحس إنك مدرك تعليمات السلامة والأمان؟
+                </h2>
+                <p
+                  class="text-base md:text-lg lg:text-xl text-gray-700 mb-6 md:mb-8 leading-relaxed text-center-mobile"
+                  data-translate="safetyTestDescription"
+                >
+                  أختبر اختبار بيب بيب للأمان وخذ لك كود خصم وخوذة مجانية
+                </p>
+                <div
+                  class="highlight-offer animate-pulse text-center-mobile"
+                  data-translate="safetyTestOffer"
+                >
+                  احصل على خصم خاص + خوذة مجانية عند اجتياز الاختبار
+                </div>
+                <div class="mt-6 md:mt-8">
+                  <button
+                    class="test-button magnetic-btn w-full md:w-auto"
+                    data-translate="startSafetyTest"
+                  >
+                    ابدأ اختبار السلامة الآن
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Content -->
+            <div class="lg:w-1/2 w-full mt-8 lg:mt-0" data-aos="fade-left">
+              <div class="relative">
+                <img
+                  src="scooters.jpeg"
+                  alt="سكوترات كهربائية السعودية"
+                  class="scooter-image w-full max-w-xs md:max-w-md mx-auto lg:max-w-lg floating"
+                />
+                <!-- التعديل هنا: نقل العنصر إلى الزاوية اليسرى السفلية -->
+                <div
+                  class="absolute -bottom-4 -left-4 bg-primary-yellow text-primary-black px-4 py-2 rounded-full font-bold text-sm shadow-lg"
+                  data-translate="safetyFirst"
+                >
+                  سلامتك أولاً!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Safety & Values Section -->
+      <section class="py-12 md:py-16 px-4 bg-white">
+        <div class="container mx-auto">
+          <!-- Main Title -->
+          <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
+            <h2
+              class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-black mb-4"
+              data-translate="valuesTitle"
+            >
+              <span class="text-primary-black">لازم تعرف قبل ما تنطلق</span>
+            </h2>
+            <p
+              class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"
+              data-translate="valuesDescription"
+            >
+              في بيب بيب، نؤمن بأن التنقل الذكي يجمع بين
+              <span class="text-primary-yellow font-bold">المرونة</span>،
+              <span class="text-primary-yellow font-bold">الأمان</span>، و
+              <span class="text-primary-yellow font-bold">الاستدامة</span>
+            </p>
+          </div>
+
+          <!-- Content Columns -->
+          <div
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16"
+          >
+            <!-- Left Column -->
+            <div class="space-y-6 md:space-y-8">
+              <!-- First Card - المرونة والسهولة -->
+              <div
+                class="safety-info-card p-4 md:p-6 rounded-xl bg-light-yellow border-l-4 border-primary-yellow"
+                data-aos="fade-right"
+              >
+                <div class="flex items-start mb-4">
+                  <div class="ml-4 flex-shrink-0">
+                    <div
+                      class="w-12 h-12 md:w-16 md:h-16 bg-primary-yellow rounded-lg flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-6 h-6 md:w-8 md:h-8 text-primary-black"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <h3
+                    class="text-xl md:text-2xl font-bold text-primary-black"
+                    data-translate="flexibilityTitle"
+                  >
+                    تنقل سلس يوافق إيقاع حياتك
+                  </h3>
+                </div>
+                <p
+                  class="text-base md:text-lg text-gray-700 leading-relaxed"
+                  data-translate="flexibilityDescription"
+                >
+                  مع بيب بيب، تستمتع بخدمة استئجار سكوترات ودراجات داخل المدينة
+                  بشكل يواكب نمط حياتك السريع. وقت أقل يُهدر في الطريق، تجربة
+                  مريحة لميزانيتك، ليكون خيارك الموثوق للمشاوير القصيرة.
+                </p>
+              </div>
+
+              <!-- Second Card - الأمان -->
+              <div
+                class="safety-info-card p-4 md:p-6 rounded-xl bg-light-yellow border-l-4 border-primary-yellow"
+                data-aos="fade-right"
+                data-aos-delay="100"
+              >
+                <div class="flex items-start mb-4">
+                  <div class="ml-4 flex-shrink-0">
+                    <div
+                      class="w-12 h-12 md:w-16 md:h-16 bg-primary-yellow rounded-lg flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-6 h-6 md:w-8 md:h-8 text-primary-black"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <h3
+                    class="text-xl md:text-2xl font-bold text-primary-black"
+                    data-translate="safetyTitle"
+                  >
+                    أمان عالي وتقنيات متطورة
+                  </h3>
+                </div>
+                <p
+                  class="text-base md:text-lg text-gray-700 leading-relaxed"
+                  data-translate="safetyDescription"
+                >
+                  نقدّم منظومة متكاملة من الحلول التقنية التي تجمع بين الأمان
+                  العالي، والكفاءة في التشغيل، والاهتمام بالاستدامة. نطوّر
+                  تقنياتنا باستمرار لتكون التجربة أسهل، أوضح، وأقرب لاحتياجك
+                  اليومي.
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6 md:space-y-8">
+              <!-- Third Card - الاستدامة -->
+              <div
+                class="safety-info-card p-4 md:p-6 rounded-xl bg-light-yellow border-l-4 border-primary-yellow"
+                data-aos="fade-left"
+              >
+                <div class="flex items-start mb-4">
+                  <div class="ml-4 flex-shrink-0">
+                    <div
+                      class="w-12 h-12 md:w-16 md:h-16 bg-primary-yellow rounded-lg flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-6 h-6 md:w-8 md:h-8 text-primary-black"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <h3
+                    class="text-xl md:text-2xl font-bold text-primary-black"
+                    data-translate="sustainabilityTitle"
+                  >
+                    تنقل مستدام وبيئة أنظف
+                  </h3>
+                </div>
+                <p
+                  class="text-base md:text-lg text-gray-700 leading-relaxed"
+                  data-translate="sustainabilityDescription"
+                >
+                  هدفنا أن يكون التنقل داخل المدينة أكثر سلاسة وبحلول تقنية
+                  مدروسة تخدم المستخدم والبيئة في نفس الوقت. نساهم في بناء مدن
+                  أكثر نشاطًا، كفاءة، واستدامة من خلال تقليل الازدحام والأثر
+                  البيئي.
+                </p>
+              </div>
+
+              <!-- Fourth Card - المسؤولية المجتمعية -->
+              <div
+                class="safety-info-card p-4 md:p-6 rounded-xl bg-light-yellow border-l-4 border-primary-yellow"
+                data-aos="fade-left"
+                data-aos-delay="100"
+              >
+                <div class="flex items-start mb-4">
+                  <div class="ml-4 flex-shrink-0">
+                    <div
+                      class="w-12 h-12 md:w-16 md:h-16 bg-primary-yellow rounded-lg flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-6 h-6 md:w-8 md:h-8 text-primary-black"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <h3
+                    class="text-xl md:text-2xl font-bold text-primary-black"
+                    data-translate="responsibilityTitle"
+                  >
+                    مسؤولية مجتمعية وشراكات مستدامة
+                  </h3>
+                </div>
+                <p
+                  class="text-base md:text-lg text-gray-700 leading-relaxed"
+                  data-translate="responsibilityDescription"
+                >
+                  نعمل على تقديم حلول تساعد الناس يتحرّكون بسهولة، وتساهم في
+                  بناء مدن أكثر نشاطًا. من خلال شراكتنا مع المشغلين المحليين،
+                  نفتح أبواب دخل مستدام ونساهم في تطوير خدمات التنقل الحضري.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expansion Journey Section -->
+          <div
+            class="bg-primary-black rounded-2xl p-6 md:p-8 lg:p-12 text-white"
+            data-aos="fade-up"
+          >
+            <div class="flex flex-col lg:flex-row items-center gap-6 md:gap-8">
+              <div class="lg:w-2/3">
+                <h3
+                  class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-primary-yellow"
+                  data-translate="expansionTitle"
+                >
+                  رحلتنا
+                </h3>
+                <p
+                  class="text-base md:text-lg lg:text-xl leading-relaxed mb-6"
+                  data-translate="expansionDescription1"
+                >
+                  بدأت رحلة بيب بيب من المملكة العربية السعودية، واليوم نوسّع
+                  حضورنا بخطوات واثقة لكي نصل لمدن ومجتمعات جديدة. نقدّم تجربة
+                  تنقّل تجمع بين المتعة، المرونة، وسهولة الاستخدام، لنخدم مختلف
+                  احتياجات التنقّل داخل المدينة بأسلوب عملي ومريح.
+                </p>
+              </div>
+              <div class="lg:w-1/3 flex justify-center mt-6 lg:mt-0">
+                <div class="relative">
+                  <div
+                    class="w-32 h-32 md:w-48 md:h-48 bg-primary-yellow rounded-full flex items-center justify-center"
+                  >
+                    <svg
+                      class="w-16 h-16 md:w-24 md:h-24 text-primary-black"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div
+                    class="absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 bg-primary-yellow text-primary-black px-3 py-1 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm shadow-lg"
+                    data-translate="expansionTagline"
+                  >
+                    من السعودية للعالم
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-primary-black text-white py-8 md:py-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <!-- Copyright -->
+          <p
+            class="text-sm text-gray-400 text-center md:text-left"
+            data-translate="copyright"
+          >
+            &copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.
+          </p>
+
+          <!-- Footer Links -->
+          <div class="flex space-x-6 text-sm">
+            <a
+              href="privacy.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="privacy"
+              >سياسة الخصوصية</a
+            >
+            <a
+              href="terms.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="terms"
+              >شروط الخدمة</a
+            >
+            <a
+              href="contact.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="contact"
+              >اتصل بنا</a
+            >
+          </div>
+
+          <!-- Social Icons -->
+          <div class="flex space-x-4">
+            <a
+              href="#"
+              aria-label="Facebook"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M14 13.5H16.5L17 9.5H14V7.5C14 6.45 14 5.5 16 5.5H17V2.5C16.327 2.454 15.632 2.492 14.945 2.5C13.568 2.5 12.398 3.076 11.531 4.225C11.196 4.757 11 5.424 11 6.25V9.5H8V13.5H11V22H14V13.5Z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://x.com/beepbeepksa?s=11"
+              aria-label="X"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2H21L13.315 10.52 22 22h-6.808l-5.263-6.873L3.56 22H2l8.27-9.035L2 2h6.91l4.77 6.315L18.244 2zm-2.59 17.17h2.057L8.5 4.743H6.293l9.36 14.427z"
+                />
+              </svg>
+            </a>
+
+            <a
+              href="https://www.instagram.com/beepbeepksa?igsh=YmZzdnMwN2FmZmE="
+              aria-label="Instagram"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/company/beepbeepksa/"
+              aria-label="LinkedIn"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.tiktok.com/@beepbeepksa?_r=1&_t=ZS-91qAFEMO7Dc"
+              aria-label="TikTok"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://snapchat.com/t/mr3outsc"
+              aria-label="Snapchat"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2c2.39 0 4.32 1.94 4.32 4.32v1.02c.01.35.21.66.53.79 1.01.44 2.1 1.02 2.1 2.14 0 .58-.32 1.09-.89 1.43-.28.17-.45.47-.45.78 0 .47.32.89.76 1.02.47.14.96.29 1.36.51.33.17.55.5.55.86a.97.97 0 01-.97.97c-.18 0-.36-.05-.54-.13a4.47 4.47 0 00-1.89-.45c-.41 0-.81.07-1.2.22-.46.16-.95.25-1.45.25-.73 0-1.42-.18-2.04-.49a1.86 1.86 0 00-1.7 0 4.7 4.7 0 01-2.04.49c-.5 0-.99-.09-1.45-.25-.38-.15-.79-.22-1.2-.22-.7 0-1.36.18-1.89.45-.18.08-.36.13-.54.13a.97.97 0 01-.97-.97c0-.36.22-.69.55-.86.4-.22.89-.37 1.36-.51.44-.13.76-.55.76-1.02 0-.31-.17-.6-.45-.78-.57-.34-.89-.85-.89-1.43 0-1.12 1.1-1.7 2.1-2.14.32-.13.52-.44.53-.79V6.32C7.68 3.94 9.61 2 12 2z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <!-- JavaScript for Interactions and Translations -->
+    <script>
+      // Translation data
+      const translations = {
+        ar: {
+          // Header
+          downloadApp: "حمل التطبيق الآن",
+          language: "اللغة",
+
+          // Safety Test Section
+          safetyTestTitle: "تحس إنك مدرك تعليمات السلامة والأمان؟",
+          safetyTestDescription:
+            "أختبر اختبار بيب بيب للأمان وخذ لك كود خصم وخوذة مجانية",
+          safetyTestOffer: "احصل على خصم خاص + خوذة مجانية عند اجتياز الاختبار",
+          startSafetyTest: "ابدأ اختبار السلامة الآن",
+          safetyFirst: "سلامتك أولاً!",
+
+          // Values Section
+          valuesTitle: "لازم تعرف قبل ما تنطلق",
+          valuesDescription:
+            "في بيب بيب، نؤمن بأن التنقل الذكي يجمع بين المرونة، الأمان، والاستدامة",
+          flexibilityTitle: "تنقل سلس يوافق إيقاع حياتك",
+          flexibilityDescription:
+            "مع بيب بيب، تستمتع بخدمة استئجار سكوترات ودراجات داخل المدينة بشكل يواكب نمط حياتك السريع. وقت أقل يُهدر في الطريق، تجربة مريحة لميزانيتك، ليكون خيارك الموثوق للمشاوير القصيرة.",
+          safetyTitle: "أمان عالي وتقنيات متطورة",
+          safetyDescription:
+            "نقدّم منظومة متكاملة من الحلول التقنية التي تجمع بين الأمان العالي، والكفاءة في التشغيل، والاهتمام بالاستدامة. نطوّر تقنياتنا باستمرار لتكون التجربة أسهل، أوضح، وأقرب لاحتياجك اليومي.",
+          sustainabilityTitle: "تنقل مستدام وبيئة أنظف",
+          sustainabilityDescription:
+            "هدفنا أن يكون التنقل داخل المدينة أكثر سلاسة وبحلول تقنية مدروسة تخدم المستخدم والبيئة في نفس الوقت. نساهم في بناء مدن أكثر نشاطًا، كفاءة، واستدامة من خلال تقليل الازدحام والأثر البيئي.",
+          responsibilityTitle: "مسؤولية مجتمعية وشراكات مستدامة",
+          responsibilityDescription:
+            "نعمل على تقديم حلول تساعد الناس يتحرّكون بسهولة، وتساهم في بناء مدن أكثر نشاطًا. من خلال شراكتنا مع المشغلين المحليين، نفتح أبواب دخل مستدام ونساهم في تطوير خدمات التنقل الحضري.",
+          expansionTitle: "رحلتنا ",
+          expansionDescription1:
+            "بدأت رحلة بيب بيب من منطلق التشارك الربحي والتشغيلي من المملكة العربية السعودية، واليوم نوسّع حضورنا بخطوات واثقة لكي نصل لمدن ومجتمعات جديدة. نقدّم تجربة تنقّل تجمع بين المتعة، المرونة، وسهولة الاستخدام، لنخدم مختلف احتياجات التنقّل داخل المدينة بأسلوب عملي ومريح.",
+          expansionTagline: "من السعودية للعالم",
+
+          // Footer
+          copyright: "&copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.",
+          privacy: "سياسة الخصوصية",
+          terms: "شروط الخدمة",
+          contact: "اتصل بنا",
+        },
+        en: {
+          // Header
+          downloadApp: "Download App Now",
+          language: "Language",
+
+          // Safety Test Section
+          safetyTestTitle: "Do you know the safety instructions?",
+          safetyTestDescription:
+            "Take the Beep beep safety test and get a discount code and a free helmet",
+          safetyTestOffer:
+            "Get a special discount + free helmet when you pass the test",
+          startSafetyTest: "Start Safety Test Now",
+          safetyFirst: "Your Safety First!",
+
+          // Values Section
+          valuesTitle: "What you need to know before you ride",
+          valuesDescription:
+            "At Beep beep, we believe smart mobility combines flexibility, safety, and sustainability",
+          flexibilityTitle: "Seamless mobility that fits your lifestyle",
+          flexibilityDescription:
+            "With Beep beep, you enjoy scooter and bike rental services within the city that keep up with your fast-paced lifestyle. Less time wasted on the road, a comfortable experience for your budget, making it your reliable choice for short trips.",
+          safetyTitle: "High safety and advanced technologies",
+          safetyDescription:
+            "We provide an integrated system of technical solutions that combine high safety, operational efficiency, and attention to sustainability. We continuously develop our technologies to make the experience easier, clearer, and closer to your daily needs.",
+          sustainabilityTitle: "Sustainable mobility and cleaner environment",
+          sustainabilityDescription:
+            "Our goal is to make urban mobility smoother with well-thought-out technical solutions that serve both the user and the environment. We contribute to building more active, efficient, and sustainable cities by reducing congestion and environmental impact.",
+          responsibilityTitle:
+            "Social responsibility and sustainable partnerships",
+          responsibilityDescription:
+            "We work to provide solutions that help people move easily and contribute to building more active cities. Through our partnerships with local operators, we open doors to sustainable income and contribute to the development of urban mobility services.",
+          expansionTitle: "Expansion Journey",
+          expansionDescription1:
+            "Beep beep's journey started from Saudi Arabia, and today we are expanding our presence with confident steps to reach new cities and communities. We offer a mobility experience that combines enjoyment, flexibility, and ease of use to serve various urban mobility needs in a practical and comfortable way.",
+          expansionDescription2:
+            "We believe that modern mobility is an essential part of quality of life, so we continuously work to provide solutions that help people move easily and contribute to building more active, efficient, and sustainable cities.",
+          expansionTagline: "From Saudi Arabia to the World",
+
+          // Footer
+          copyright: "&copy; 2025 Beep beep App. All rights reserved.",
+          privacy: "Privacy Policy",
+          terms: "Terms of Service",
+          contact: "Contact Us",
+        },
+        de: {
+          // Header
+          downloadApp: "Jetzt App herunterladen",
+          language: "Sprache",
+
+          // Safety Test Section
+          safetyTestTitle: "Kennen Sie die Sicherheitsanweisungen?",
+          safetyTestDescription:
+            "Machen Sie den Beep beep Sicherheitstest und erhalten Sie einen Rabattcode und einen kostenlosen Helm",
+          safetyTestOffer:
+            "Erhalten Sie einen Sonderrabatt + kostenlosen Helm, wenn Sie den Test bestehen",
+          startSafetyTest: "Sicherheitstest jetzt starten",
+          safetyFirst: "Ihre Sicherheit zuerst!",
+
+          // Values Section
+          valuesTitle: "Was Sie wissen müssen, bevor Sie fahren",
+          valuesDescription:
+            "Bei Beep beep glauben wir, dass intelligente Mobilität Flexibilität, Sicherheit und Nachhaltigkeit kombiniert",
+          flexibilityTitle: "Nahtlose Mobilität, die zu Ihrem Lebensstil passt",
+          flexibilityDescription:
+            "Mit Beep beep genießen Sie Scooter- und Fahrradverleihdienste in der Stadt, die mit Ihrem schnelllebigen Lebensstil Schritt halten. Weniger Zeitverschwendung auf der Straße, ein komfortables Erlebnis für Ihr Budget, das es zu Ihrer zuverlässigen Wahl für kurze Strecken macht.",
+          safetyTitle: "Hohe Sicherheit und fortschrittliche Technologien",
+          safetyDescription:
+            "Wir bieten ein integriertes System technischer Lösungen, die hohe Sicherheit, betriebliche Effizienz und Nachhaltigkeit kombinieren. Wir entwickeln unsere Technologien kontinuierlich weiter, um das Erlebnis einfacher, klarer und näher an Ihren täglichen Bedürfnissen zu gestalten.",
+          sustainabilityTitle: "Nachhaltige Mobilität und sauberere Umwelt",
+          sustainabilityDescription:
+            "Unser Ziel ist es, die städtische Mobilität mit durchdachten technischen Lösungen zu verbessern, die sowohl dem Nutzer als auch der Umwelt dienen. Wir tragen zum Aufbau aktiverer, effizienterer und nachhaltigerer Städte bei, indem wir Staus und Umweltauswirkungen reduzieren.",
+          responsibilityTitle:
+            "Soziale Verantwortung und nachhaltige Partnerschaften",
+          responsibilityDescription:
+            "Wir arbeiten daran, Lösungen zu bieten, die Menschen helfen, sich leicht zu bewegen und zum Aufbau aktiverer Städte beitragen. Durch unsere Partnerschaften mit lokalen Betreibern öffnen wir Türen zu nachhaltigem Einkommen und tragen zur Entwicklung urbaner Mobilitätsdienste bei.",
+          expansionTitle: "Expansionsreise",
+          expansionDescription1:
+            "Die Reise von Beep beep begann in Saudi-Arabien, und heute erweitern wir unsere Präsenz mit selbstbewussten Schritten, um neue Städte und Gemeinden zu erreichen. Wir bieten ein Mobilitätserlebnis, das Genuss, Flexibilität und Benutzerfreundlichkeit kombiniert, um verschiedene urbane Mobilitätsbedürfnisse auf praktische und komfortable Weise zu bedienen.",
+          expansionDescription2:
+            "Wir glauben, dass moderne Mobilität ein wesentlicher Bestandteil der Lebensqualität ist, daher arbeiten wir kontinuierlich daran, Lösungen zu bieten, die Menschen helfen, sich leicht zu bewegen und zum Aufbau aktiverer, effizienterer und nachhaltigerer Städte beizutragen.",
+          expansionTagline: "Von Saudi-Arabien in die Welt",
+
+          // Footer
+          copyright: "&copy; 2025 Beep beep App. Alle Rechte vorbehalten.",
+          privacy: "Datenschutzrichtlinie",
+          terms: "Nutzungsbedingungen",
+          contact: "Kontaktieren Sie uns",
+        },
+        es: {
+          // Header
+          downloadApp: "Descargar App Ahora",
+          language: "Idioma",
+
+          // Safety Test Section
+          safetyTestTitle: "¿Conoces las instrucciones de seguridad?",
+          safetyTestDescription:
+            "Realiza la prueba de seguridad de Beep beep y obtén un código de descuento y un casco gratuito",
+          safetyTestOffer:
+            "Obtén un descuento especial + casco gratuito cuando apruebes la prueba",
+          startSafetyTest: "Iniciar Prueba de Seguridad Ahora",
+          safetyFirst: "¡Tu Seguridad es lo Primero!",
+
+          // Values Section
+          valuesTitle: "Lo que necesitas saber antes de conducir",
+          valuesDescription:
+            "En Beep beep, creemos que la movilidad inteligente combina flexibilidad, seguridad y sostenibilidad",
+          flexibilityTitle:
+            "Movilidad sin interrupciones que se adapta a tu estilo de vida",
+          flexibilityDescription:
+            "Con Beep beep, disfrutas de servicios de alquiler de scooters y bicicletas dentro de la ciudad que se mantienen al día con tu estilo de vida acelerado. Menos tiempo perdido en el camino, una experiencia cómoda para tu presupuesto, convirtiéndolo en tu opción confiable para viajes cortos.",
+          safetyTitle: "Alta seguridad y tecnologías avanzadas",
+          safetyDescription:
+            "Proporcionamos un sistema integrado de soluciones técnicas que combinan alta seguridad, eficiencia operativa y atención a la sostenibilidad. Desarrollamos continuamente nuestras tecnologías para hacer la experiencia más fácil, clara y cercana a tus necesidades diarias.",
+          sustainabilityTitle:
+            "Movilidad sostenible y medio ambiente más limpio",
+          sustainabilityDescription:
+            "Nuestro objetivo es hacer que la movilidad urbana sea más fluida con soluciones técnicas bien pensadas que sirvan tanto al usuario como al medio ambiente. Contribuimos a construir ciudades más activas, eficientes y sostenibles reduciendo la congestión y el impacto ambiental.",
+          responsibilityTitle:
+            "Responsabilidad social y asociaciones sostenibles",
+          responsibilityDescription:
+            "Trabajamos para proporcionar soluciones que ayuden a las personas a moverse fácilmente y contribuyan a construir ciudades más activas. A través de nuestras asociaciones con operadores locales, abrimos puertas a ingresos sostenibles y contribuimos al desarrollo de servicios de movilidad urbana.",
+          expansionTitle: "Viaje de Expansión",
+          expansionDescription1:
+            "El viaje de Beep beep comenzó desde Arabia Saudita, y hoy estamos expandiendo nuestra presencia con pasos seguros para llegar a nuevas ciudades y comunidades. Ofrecemos una experiencia de movilidad que combina disfrute, flexibilidad y facilidad de uso para servir diversas necesidades de movilidad urbana de manera práctica y cómoda.",
+          expansionDescription2:
+            "Creemos que la movilidad moderna es una parte esencial de la calidad de life, por lo que trabajamos continuamente para proporcionar soluciones que ayuden a las personas a moverse fácilmente y contribuyan a construir ciudades más activas, eficientes y sostenibles.",
+          expansionTagline: "De Arabia Saudita al Mundo",
+
+          // Footer
+          copyright:
+            "&copy; 2025 Aplicación Beep beep. Todos los derechos reservados.",
+          privacy: "Política de Privacidad",
+          terms: "Términos de Servicio",
+          contact: "Contáctanos",
+        },
+      };
+
+      // Language configuration
+      const languageConfig = {
+        ar: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png",
+          dir: "rtl",
+          name: "العربية",
+        },
+        en: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png",
+          dir: "ltr",
+          name: "English",
+        },
+        de: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/DEU.png",
+          dir: "ltr",
+          name: "Deutsch",
+        },
+        es: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/ESP.png",
+          dir: "ltr",
+          name: "Español",
+        },
+      };
+
+      // Current language
+      let currentLang = "ar";
+
+      // Function to change language
+      function changeLanguage(lang) {
+        if (!translations[lang]) return;
+
+        currentLang = lang;
+
+        // Update all elements with data-translate attribute
+        document.querySelectorAll("[data-translate]").forEach((element) => {
+          const key = element.getAttribute("data-translate");
+          if (translations[lang][key]) {
+            if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+              element.value = translations[lang][key];
+            } else {
+              element.innerHTML = translations[lang][key];
+            }
+          }
+        });
+
+        // Update language selector
+        const config = languageConfig[lang];
+        document.getElementById("currentLangFlag").src = config.flag;
+        document.getElementById("currentLangCode").textContent =
+          lang.toUpperCase();
+        document.getElementById("mobileCurrentLang").textContent = config.name;
+
+        // Update HTML direction
+        document.documentElement.dir = config.dir;
+        document.documentElement.lang = lang;
+
+        // Close language dropdown
+        const langMenu = document.getElementById("langMenu");
+        const langButton = document.getElementById("langButton");
+        if (langMenu && langButton) {
+          langMenu.classList.add("hidden");
+          langButton.setAttribute("aria-expanded", "false");
+          langButton.classList.remove("active");
+        }
+
+        // Save preference to localStorage
+        localStorage.setItem("preferredLanguage", lang);
+      }
+
+      // Initialize AOS (Animate On Scroll)
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100,
+      });
+
+      // Initialize GSAP with ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Add GSAP animations for more advanced effects
+      document.addEventListener("DOMContentLoaded", () => {
+        // Load saved language preference or default to Arabic
+        const savedLang = localStorage.getItem("preferredLanguage") || "ar";
+        changeLanguage(savedLang);
+
+        // Language option click handlers
+        document.querySelectorAll(".lang-option").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            e.preventDefault();
+            const lang = option.getAttribute("data-lang");
+            changeLanguage(lang);
+          });
+        });
+
+        // Mobile language option click handlers
+        document.querySelectorAll(".lang-option-mobile").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            e.preventDefault();
+            const lang = option.getAttribute("data-lang");
+            changeLanguage(lang);
+          });
+        });
+
+        // Animate elements with GSAP
+        gsap.utils.toArray(".hover-3d").forEach((element) => {
+          element.addEventListener("mouseenter", () => {
+            gsap.to(element, {
+              duration: 0.5,
+              y: -10,
+              rotationX: 5,
+              ease: "power2.out",
+            });
+          });
+
+          element.addEventListener("mouseleave", () => {
+            gsap.to(element, {
+              duration: 0.5,
+              y: 0,
+              rotationX: 0,
+              ease: "power2.out",
+            });
+          });
+        });
+
+        // Magnetic button effect
+        gsap.utils.toArray(".magnetic-btn").forEach((button) => {
+          button.addEventListener("mousemove", (e) => {
+            const x = e.offsetX - button.clientWidth / 2;
+            const y = e.offsetY - button.clientHeight / 2;
+
+            gsap.to(button, {
+              duration: 0.3,
+              x: x * 0.1,
+              y: y * 0.1,
+              ease: "power2.out",
+            });
+          });
+
+          button.addEventListener("mouseleave", () => {
+            gsap.to(button, {
+              duration: 0.3,
+              x: 0,
+              y: 0,
+              ease: "power2.out",
+            });
+          });
+        });
+
+        // --- Language Dropdown Functionality ---
+        const langButton = document.getElementById("langButton");
+        const langMenu = document.getElementById("langMenu");
+
+        if (langButton && langMenu) {
+          langButton.addEventListener("click", () => {
+            const isExpanded =
+              langButton.getAttribute("aria-expanded") === "true" || false;
+            langButton.setAttribute("aria-expanded", !isExpanded);
+            langMenu.classList.toggle("hidden");
+            langButton.classList.toggle("active");
+          });
+
+          // Close dropdown if user clicks outside
+          document.addEventListener("click", (event) => {
+            if (
+              !langButton.contains(event.target) &&
+              !langMenu.contains(event.target)
+            ) {
+              langButton.setAttribute("aria-expanded", "false");
+              langMenu.classList.add("hidden");
+              langButton.classList.remove("active");
+            }
+          });
+        }
+
+        // --- Mobile Menu Toggle Functionality ---
+        const mobileMenuButton = document.getElementById("mobileMenuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+          });
+        }
+
+        // Safety Test Button Animation
+        const testButton = document.querySelector(".test-button");
+        if (testButton) {
+          testButton.addEventListener("click", function () {
+            // Add animation effect
+            gsap.to(this, {
+              duration: 0.2,
+              scale: 0.95,
+              yoyo: true,
+              repeat: 1,
+              ease: "power2.inOut",
+            });
+
+            // Here you would typically redirect to the test or open a modal
+            alert("سيتم توجيهك إلى اختبار السلامة قريباً!");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

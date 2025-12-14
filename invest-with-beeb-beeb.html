@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بيب بيب - تطبيق التنقل الذكي</title>
+    <link rel="icon" href="logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="shortcut icon" href="logo.png" type="image/png" />
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- AOS Library for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <!-- Animate.css for additional animations -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <!-- Google Fonts for Arabic and English -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Configure Tailwind for custom colors/theme -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-yellow": "#fdd703",
+              "light-yellow": "#fef2ab",
+              "dark-yellow": "#ae9000",
+              "primary-black": "#000000",
+              "dark-green": "#5b532c",
+              "accent-green": "#63a361",
+              "luxury-gold": "#d4af37",
+              "deep-black": "#0a0a0a",
+            },
+            fontFamily: {
+              jannat: ["Tajawal", "sans-serif"],
+              sans: ["Inter", "sans-serif"],
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              "pulse-glow": "pulse-glow 2s ease-in-out infinite alternate",
+              "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+              "slide-in-right": "slideInRight 0.8s ease-out forwards",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              "pulse-glow": {
+                "0%": {
+                  boxShadow:
+                    "0 0 5px #fdd703, 0 0 10px #fdd703, 0 0 15px #fdd703",
+                },
+                "100%": {
+                  boxShadow:
+                    "0 0 10px #fdd703, 0 0 20px #fdd703, 0 0 30px #fdd703",
+                },
+              },
+              fadeInUp: {
+                "0%": { opacity: "0", transform: "translateY(30px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              slideInRight: {
+                "0%": { opacity: "0", transform: "translateX(30px)" },
+                "100%": { opacity: "1", transform: "translateX(0)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :root {
+        --font_7: normal normal normal 20px / 1.4em "Tajawal", sans-serif;
+      }
+
+      body {
+        font-family: "Tajawal", sans-serif;
+        background-color: #fef2ab;
+        overflow-x: hidden;
+      }
+
+      .font-jannat {
+        font-family: "Tajawal", sans-serif;
+      }
+
+      .mail-icon svg {
+        transition: all 0.3s ease;
+        fill: currentColor;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      .lang-dropdown.active .chevron-down {
+        transform: rotate(180deg);
+      }
+
+      .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        right: 0;
+        width: 60px;
+        height: 3px;
+        background-color: #fdd703;
+      }
+
+      .hero-bg {
+        background: linear-gradient(135deg, #fdd703 0%, #ae9000 100%);
+      }
+
+      .impact-section {
+        background-color: #5b532c;
+        color: white;
+      }
+
+      /* Luxury styling */
+      .luxury-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+      }
+
+      .luxury-border {
+        border: 1px solid rgba(253, 215, 3, 0.3);
+      }
+
+      .gold-gradient {
+        background: linear-gradient(
+          135deg,
+          #fdd703 0%,
+          #d4af37 50%,
+          #ae9000 100%
+        );
+      }
+
+      .text-gold {
+        color: #d4af37;
+      }
+
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite alternate;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #fdd703, #ae9000);
+        border-radius: 10px;
+      }
+
+      /* Hide elements initially for animation */
+      [data-aos] {
+        opacity: 0;
+        transition-property: transform, opacity;
+      }
+
+      /* Custom animations */
+      @keyframes shimmer {
+        0% {
+          background-position: -1000px 0;
+        }
+        100% {
+          background-position: 1000px 0;
+        }
+      }
+
+      .shimmer {
+        animation: shimmer 3s infinite linear;
+        background: linear-gradient(
+          to right,
+          transparent 0%,
+          rgba(255, 255, 255, 0.4) 50%,
+          transparent 100%
+        );
+        background-size: 1000px 100%;
+      }
+
+      /* Parallax effect */
+      .parallax {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      /* 3D transform on hover */
+      .hover-3d {
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+      }
+
+      .hover-3d:hover {
+        transform: translateY(-10px) rotateX(5deg);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Magnetic button effect */
+      .magnetic-btn {
+        transition: transform 0.3s ease;
+      }
+
+      .magnetic-btn:hover {
+        transform: scale(1.05);
+      }
+
+      /* Custom styling for the new hero section */
+      .hero-text-gradient {
+        background: linear-gradient(135deg, #000000 0%, #5b532c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .highlight-text {
+        position: relative;
+        display: inline-block;
+      }
+
+      .highlight-text::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 30%;
+        background-color: rgba(253, 215, 3, 0.3);
+        z-index: -1;
+        transform: skewX(-15deg);
+      }
+
+      /* Form styling */
+      .form-input {
+        transition: all 0.3s ease;
+        border: 2px solid #e5e7eb;
+      }
+
+      .form-input:focus {
+        border-color: #fdd703;
+        box-shadow: 0 0 0 3px rgba(253, 215, 3, 0.2);
+      }
+
+      .option-card {
+        transition: all 0.3s ease;
+        border: 2px solid #e5e7eb;
+        cursor: pointer;
+      }
+
+      .option-card:hover {
+        border-color: #fdd703;
+        transform: translateY(-5px);
+      }
+
+      .option-card.selected {
+        border-color: #fdd703;
+        background-color: rgba(253, 215, 3, 0.1);
+      }
+
+      .success-message {
+        display: none;
+        background: linear-gradient(135deg, #63a361, #4a7c47);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        text-align: center;
+      }
+
+      .pulse-gold {
+        animation: pulse-gold 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse-gold {
+        0% {
+          box-shadow: 0 0 20px rgba(253, 215, 3, 0.4);
+        }
+        100% {
+          box-shadow: 0 0 40px rgba(253, 215, 3, 0.8),
+            0 0 60px rgba(253, 215, 3, 0.4);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light-yellow font-jannat" dir="rtl">
+    <!-- Header Section -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-lg">
+      <div
+        class="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center"
+      >
+        <!-- Logo/Brand Link -->
+        <a
+          href="index.html"
+          class="flex items-center"
+          aria-label="بيب بيب الرئيسية"
+        >
+          <div class="relative">
+            <div
+              class="absolute -inset-1 bg-primary-yellow rounded-full blur opacity-30"
+            ></div>
+            <img
+              src="logo.png"
+              alt="لوجو بيب بيب"
+              class="h-16 w-16 object-contain relative"
+            />
+          </div>
+        </a>
+
+        <!-- Right side: Buttons and Language Selector -->
+        <div class="hidden md:flex items-center space-x-4">
+          <!-- Language Selector Dropdown -->
+          <div class="relative inline-block text-left">
+            <button
+              id="langButton"
+              class="lang-dropdown inline-flex justify-center items-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-all duration-300 magnetic-btn"
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              <img
+                id="currentLangFlag"
+                src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png"
+                alt="Arabic Flag"
+                class="h-4 w-4 mr-1 rounded-full"
+              />
+              <span id="currentLangCode">AR</span>
+              <svg
+                class="-mr-1 ml-2 h-4 w-4 transition-transform duration-200 chevron-down"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.97l3.71-3.74a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <div
+              id="langMenu"
+              class="hidden absolute right-0 mt-2 w-40 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none luxury-card"
+              role="menu"
+              aria-orientation="vertical"
+              aria-labelledby="langButton"
+              tabindex="-1"
+            >
+              <!-- Language options -->
+              <div class="py-1" role="none">
+                <a
+                  href="#"
+                  class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                  data-lang="ar"
+                >
+                  <img
+                    src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png"
+                    alt="Arabic Flag"
+                    class="h-4 w-4 mr-2 rounded-full"
+                  />
+                  AR
+                </a>
+                <a
+                  href="#"
+                  class="lang-option flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-200"
+                  data-lang="en"
+                >
+                  <img
+                    src="https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png"
+                    alt="English Flag"
+                    class="h-4 w-4 mr-2 rounded-full"
+                  />
+                  EN
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden">
+          <button
+            id="mobileMenuButton"
+            class="text-primary-black p-2 rounded-lg hover:bg-gray-100 transition-all duration-300"
+            aria-label="Open menu"
+          >
+            <svg
+              class="h-6 w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobileMenu"
+        class="hidden md:hidden border-t border-gray-100 pb-4"
+      >
+        <div class="flex flex-col space-y-2 px-4 pt-2">
+          <!-- Simple language link/placeholder for mobile -->
+          <div class="px-3 py-2 text-sm font-medium text-gray-700 rounded-lg">
+            <span data-translate="language">اللغة:</span>
+            <span id="mobileCurrentLang">العربية</span>
+          </div>
+
+          <!-- Language options for mobile -->
+          <div class="flex flex-wrap gap-2 px-3">
+            <button
+              class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full"
+              data-lang="ar"
+            >
+              العربية
+            </button>
+            <button
+              class="lang-option-mobile px-3 py-1 text-xs bg-gray-100 rounded-full"
+              data-lang="en"
+            >
+              English
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Contact Form Section -->
+      <section class="py-20 bg-white overflow-hidden" id="contact-form">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="max-w-2xl mx-auto">
+            <!-- Section Title -->
+            <div
+              class="text-center mb-16"
+              data-aos="fade-up"
+              data-aos-duration="800"
+            >
+              <h2
+                class="text-4xl md:text-5xl font-bold text-primary-black"
+                data-translate="partnershipRequest"
+              >
+                كن شريك مع بيب بيب
+              </h2>
+              <p
+                class="text-lg text-gray-600 mt-4"
+                data-translate="fillFormBelow"
+              >
+                املأ النموذج أدناه وسنتواصل معك قريباً
+              </p>
+            </div>
+
+            <!-- Form Container -->
+            <div
+              class="bg-gradient-to-br from-light-yellow to-primary-yellow/20 rounded-3xl p-8 md:p-12 shadow-2xl"
+              data-aos="zoom-in"
+              data-aos-duration="1000"
+            >
+              <form id="partnershipForm" class="space-y-8">
+                <!-- Name Field -->
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay="100"
+                >
+                  <label
+                    for="name"
+                    class="block text-lg font-medium text-primary-black mb-2"
+                    data-translate="fullName"
+                    >الاسم الكامل</label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    class="w-full px-4 py-3 text-lg rounded-xl form-input focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                    placeholder="أدخل اسمك الكامل"
+                    data-translate-placeholder="enterFullName"
+                  />
+                </div>
+
+                <!-- Phone Field -->
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay="200"
+                >
+                  <label
+                    for="phone"
+                    class="block text-lg font-medium text-primary-black mb-2"
+                    data-translate="phoneNumber"
+                    >رقم الجوال</label
+                  >
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    class="w-full px-4 py-3 text-lg rounded-xl form-input focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                    placeholder="05XXXXXXXX"
+                    data-translate-placeholder="enterPhoneNumber"
+                  />
+                </div>
+
+                <!-- City Field -->
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay="300"
+                >
+                  <label
+                    for="city"
+                    class="block text-lg font-medium text-primary-black mb-2"
+                    data-translate="city"
+                    >المدينة</label
+                  >
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    required
+                    class="w-full px-4 py-3 text-lg rounded-xl form-input focus:outline-none focus:ring-2 focus:ring-primary-yellow"
+                    placeholder="المدينة التي ترغب بالعمل فيها"
+                    data-translate-placeholder="enterCity"
+                  />
+                </div>
+
+                <!-- Vehicle Options -->
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay="400"
+                >
+                  <label
+                    class="block text-lg font-medium text-primary-black mb-4"
+                    data-translate="selectVehicles"
+                    >اختر عدد المركبات المطلوبة</label
+                  >
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Option 1 -->
+                    <div
+                      class="option-card rounded-xl p-6 text-center bg-white"
+                      data-vehicles="5-15"
+                    >
+                      <div
+                        class="w-16 h-16 mx-auto mb-4 bg-primary-yellow rounded-full flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-8 h-8 text-primary-black"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                          />
+                        </svg>
+                      </div>
+                      <h3
+                        class="text-xl font-bold text-primary-black mb-2"
+                        data-translate="vehicles5to15"
+                      >
+                        5 - 15 مركبة
+                      </h3>
+                      <p
+                        class="text-gray-600 text-sm"
+                        data-translate="starterPackage"
+                      >
+                        باقة مبتدئة مثالية للبداية
+                      </p>
+                    </div>
+
+                    <!-- Option 2 -->
+                    <div
+                      class="option-card rounded-xl p-6 text-center bg-white"
+                      data-vehicles="15-30"
+                    >
+                      <div
+                        class="w-16 h-16 mx-auto mb-4 bg-primary-yellow rounded-full flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-8 h-8 text-primary-black"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                      </div>
+                      <h3
+                        class="text-xl font-bold text-primary-black mb-2"
+                        data-translate="vehicles15to30"
+                      >
+                        15 - 30 مركبة
+                      </h3>
+                      <p
+                        class="text-gray-600 text-sm"
+                        data-translate="mediumPackage"
+                      >
+                        باقة متوسطة لتنمية العمل
+                      </p>
+                    </div>
+
+                    <!-- Option 3 -->
+                    <div
+                      class="option-card rounded-xl p-6 text-center bg-white"
+                      data-vehicles="30-45"
+                    >
+                      <div
+                        class="w-16 h-16 mx-auto mb-4 bg-primary-yellow rounded-full flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-8 h-8 text-primary-black"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                          />
+                        </svg>
+                      </div>
+                      <h3
+                        class="text-xl font-bold text-primary-black mb-2"
+                        data-translate="vehicles30to45"
+                      >
+                        30 - 45 مركبة
+                      </h3>
+                      <p
+                        class="text-gray-600 text-sm"
+                        data-translate="advancedPackage"
+                      >
+                        باقة متقدمة لشركاء متميزين
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Hidden input to store selected value -->
+                  <input type="hidden" id="vehicles" name="vehicles" required />
+                </div>
+
+                <!-- Success Message -->
+                <div
+                  id="successMessage"
+                  class="success-message"
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                >
+                  <p
+                    class="text-lg font-semibold"
+                    data-translate="requestSentSuccess"
+                  >
+                    تم إرسال طلبك بنجاح! سنتواصل معك قريباً
+                  </p>
+                </div>
+
+                <!-- Submit Button -->
+                <div
+                  class="text-center pt-4"
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  data-aos-delay="600"
+                >
+                  <button
+                    type="submit"
+                    class="px-12 py-4 text-xl font-bold text-white bg-primary-black rounded-full shadow-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 active:scale-95 pulse-gold"
+                    data-translate="submitRequest"
+                  >
+                    إرسال الطلب
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-primary-black text-white py-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <!-- Copyright -->
+          <p class="text-sm text-gray-400" data-translate="copyright">
+            &copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.
+          </p>
+
+          <!-- Footer Links -->
+          <div class="flex space-x-6 text-sm">
+            <a
+              href="privacy.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="privacy"
+              >سياسة الخصوصية</a
+            >
+            <a
+              href="terms.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="terms"
+              >شروط الخدمة</a
+            >
+            <a
+              href="contact.html"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+              data-translate="contact"
+              >اتصل بنا</a
+            >
+          </div>
+
+          <!-- Social Icons -->
+          <div class="flex space-x-4">
+            <a
+              href="#"
+              aria-label="Facebook"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M14 13.5H16.5L17 9.5H14V7.5C14 6.45 14 5.5 16 5.5H17V2.5C16.327 2.454 15.632 2.492 14.945 2.5C13.568 2.5 12.398 3.076 11.531 4.225C11.196 4.757 11 5.424 11 6.25V9.5H8V13.5H11V22H14V13.5Z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://x.com/beepbeepksa?s=11"
+              aria-label="X"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2H21L13.315 10.52 22 22h-6.808l-5.263-6.873L3.56 22H2l8.27-9.035L2 2h6.91l4.77 6.315L18.244 2zm-2.59 17.17h2.057L8.5 4.743H6.293l9.36 14.427z"
+                />
+              </svg>
+            </a>
+
+            <a
+              href="https://www.instagram.com/beepbeepksa?igsh=YmZzdnMwN2FmZmE="
+              aria-label="Instagram"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/company/beepbeepksa/"
+              aria-label="LinkedIn"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://www.tiktok.com/@beepbeepksa?_r=1&_t=ZS-91qAFEMO7Dc"
+              aria-label="TikTok"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://snapchat.com/t/mr3outsc"
+              aria-label="Snapchat"
+              class="text-gray-400 hover:text-primary-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2c2.39 0 4.32 1.94 4.32 4.32v1.02c.01.35.21.66.53.79 1.01.44 2.1 1.02 2.1 2.14 0 .58-.32 1.09-.89 1.43-.28.17-.45.47-.45.78 0 .47.32.89.76 1.02.47.14.96.29 1.36.51.33.17.55.5.55.86a.97.97 0 01-.97.97c-.18 0-.36-.05-.54-.13a4.47 4.47 0 00-1.89-.45c-.41 0-.81.07-1.2.22-.46.16-.95.25-1.45.25-.73 0-1.42-.18-2.04-.49a1.86 1.86 0 00-1.7 0 4.7 4.7 0 01-2.04.49c-.5 0-.99-.09-1.45-.25-.38-.15-.79-.22-1.2-.22-.7 0-1.36.18-1.89.45-.18.08-.36.13-.54.13a.97.97 0 01-.97-.97c0-.36.22-.69.55-.86.4-.22.89-.37 1.36-.51.44-.13.76-.55.76-1.02 0-.31-.17-.6-.45-.78-.57-.34-.89-.85-.89-1.43 0-1.12 1.1-1.7 2.1-2.14.32-.13.52-.44.53-.79V6.32C7.68 3.94 9.61 2 12 2z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <!-- JavaScript for Interactions and Translations -->
+    <script>
+      // Complete translation data for all page content
+      const translations = {
+        ar: {
+          // Header
+
+          language: "اللغة",
+
+          // Form section
+          partnershipRequest: "كن شريك مع بيب بيب",
+          fillFormBelow: "املأ النموذج أدناه وسنتواصل معك قريباً",
+          fullName: "الاسم الكامل",
+          enterFullName: "أدخل اسمك الكامل",
+          phoneNumber: "رقم الجوال",
+          enterPhoneNumber: "05XXXXXXXX",
+          city: "المدينة",
+          enterCity: "المدينة التي ترغب بالعمل فيها",
+          selectVehicles: "اختر عدد المركبات المطلوبة",
+          vehicles5to15: "5 - 15 مركبة",
+          starterPackage: "باقة مبتدئة مثالية للبداية",
+          vehicles15to30: "15 - 30 مركبة",
+          mediumPackage: "باقة متوسطة لتنمية العمل",
+          vehicles30to45: "30 - 45 مركبة",
+          advancedPackage: "باقة متقدمة لشركاء متميزين",
+          submitRequest: "إرسال الطلب",
+          requestSentSuccess: "تم إرسال طلبك بنجاح! سنتواصل معك قريباً",
+
+          // Footer
+          copyright: "&copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.",
+          privacy: "سياسة الخصوصية",
+          terms: "شروط الخدمة",
+          contact: "اتصل بنا",
+        },
+        en: {
+          // Header
+          menu: "Menu",
+          downloadApp: "Download App Now",
+          language: "Language",
+
+          // Form section
+          partnershipRequest: "Partnership Request with Beep beep",
+          fillFormBelow: "Fill out the form below and we'll contact you soon",
+          fullName: "Full Name",
+          enterFullName: "Enter your full name",
+          phoneNumber: "Phone Number",
+          enterPhoneNumber: "Enter your phone number",
+          city: "City",
+          enterCity: "City where you want to work",
+          selectVehicles: "Select the number of vehicles required",
+          vehicles5to15: "5 - 15 vehicles",
+          starterPackage: "Starter package perfect for beginners",
+          vehicles15to30: "15 - 30 vehicles",
+          mediumPackage: "Medium package for business growth",
+          vehicles30to45: "30 - 45 vehicles",
+          advancedPackage: "Advanced package for distinguished partners",
+          submitRequest: "Submit Request",
+          requestSentSuccess:
+            "Your request has been sent successfully! We will contact you soon",
+
+          // Footer
+          copyright: "&copy; 2025 Beep beep App. All rights reserved.",
+          privacy: "Privacy Policy",
+          terms: "Terms of Service",
+          contact: "Contact Us",
+        },
+        de: {
+          // Header
+          menu: "Menü",
+          downloadApp: "Jetzt App herunterladen",
+          language: "Sprache",
+
+          // Form section
+          partnershipRequest: "Partnerschaftsanfrage mit Beep beep",
+          fillFormBelow:
+            "Füllen Sie das untenstehende Formular aus und wir werden uns bald bei Ihnen melden",
+          fullName: "Vollständiger Name",
+          enterFullName: "Geben Sie Ihren vollständigen Namen ein",
+          phoneNumber: "Telefonnummer",
+          enterPhoneNumber: "Geben Sie Ihre Telefonnummer ein",
+          city: "Stadt",
+          enterCity: "Stadt, in der Sie arbeiten möchten",
+          selectVehicles: "Wählen Sie die Anzahl der benötigten Fahrzeuge",
+          vehicles5to15: "5 - 15 Fahrzeuge",
+          starterPackage: "Starter-Paket perfekt für Anfänger",
+          vehicles15to30: "15 - 30 Fahrzeuge",
+          mediumPackage: "Mittleres Paket für Geschäftswachstum",
+          vehicles30to45: "30 - 45 Fahrzeuge",
+          advancedPackage: "Erweitertes Paket für herausragende Partner",
+          submitRequest: "Anfrage senden",
+          requestSentSuccess:
+            "Ihre Anfrage wurde erfolgreich gesendet! Wir werden uns bald bei Ihnen melden",
+
+          // Footer
+          copyright: "&copy; 2025 Beep beep App. Alle Rechte vorbehalten.",
+          privacy: "Datenschutzrichtlinie",
+          terms: "Nutzungsbedingungen",
+          contact: "Kontaktieren Sie uns",
+        },
+        es: {
+          // Header
+          menu: "Menú",
+          downloadApp: "Descargar App Ahora",
+          language: "Idioma",
+
+          // Form section
+          partnershipRequest: "Solicitud de Asociación con Beep beep",
+          fillFormBelow:
+            "Complete el formulario a continuación y nos pondremos en contacto con usted pronto",
+          fullName: "Nombre Completo",
+          enterFullName: "Ingrese su nombre completo",
+          phoneNumber: "Número de Teléfono",
+          enterPhoneNumber: "Ingrese su número de teléfono",
+          city: "Ciudad",
+          enterCity: "Ciudad donde desea trabajar",
+          selectVehicles: "Seleccione la cantidad de vehículos requeridos",
+          vehicles5to15: "5 - 15 vehículos",
+          starterPackage: "Paquete inicial perfecto para principiantes",
+          vehicles15to30: "15 - 30 vehículos",
+          mediumPackage: "Paquete medio para crecimiento empresarial",
+          vehicles30to45: "30 - 45 vehículos",
+          advancedPackage: "Paquete avanzado para socios distinguidos",
+          submitRequest: "Enviar Solicitud",
+          requestSentSuccess:
+            "¡Su solicitud ha sido enviada con éxito! Nos pondremos en contacto con usted pronto",
+
+          // Footer
+          copyright:
+            "&copy; 2025 Aplicación Beep beep. Todos los derechos reservados.",
+          privacy: "Política de Privacidad",
+          terms: "Términos de Servicio",
+          contact: "Contáctanos",
+        },
+      };
+
+      // Language configuration
+      const languageConfig = {
+        ar: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/SAU.png",
+          dir: "rtl",
+          name: "العربية",
+        },
+        en: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/USA.png",
+          dir: "ltr",
+          name: "English",
+        },
+        de: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/DEU.png",
+          dir: "ltr",
+          name: "Deutsch",
+        },
+        es: {
+          flag: "https://static.parastorage.com/services/linguist-flags/1.969.0/assets/flags/corner/ESP.png",
+          dir: "ltr",
+          name: "Español",
+        },
+      };
+
+      // Current language
+      let currentLang = "ar";
+
+      // Function to change language
+      function changeLanguage(lang) {
+        if (!translations[lang]) return;
+
+        currentLang = lang;
+
+        // Update all elements with data-translate attribute
+        document.querySelectorAll("[data-translate]").forEach((element) => {
+          const key = element.getAttribute("data-translate");
+          if (translations[lang][key]) {
+            if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+              element.value = translations[lang][key];
+            } else {
+              element.innerHTML = translations[lang][key];
+            }
+          }
+        });
+
+        // Update placeholder texts
+        document
+          .querySelectorAll("[data-translate-placeholder]")
+          .forEach((element) => {
+            const key = element.getAttribute("data-translate-placeholder");
+            if (translations[lang][key]) {
+              element.placeholder = translations[lang][key];
+            }
+          });
+
+        // Update language selector
+        const config = languageConfig[lang];
+        document.getElementById("currentLangFlag").src = config.flag;
+        document.getElementById("currentLangCode").textContent =
+          lang.toUpperCase();
+        document.getElementById("mobileCurrentLang").textContent = config.name;
+
+        // Update HTML direction and language
+        document.documentElement.dir = config.dir;
+        document.documentElement.lang = lang;
+
+        // Close language dropdown
+        const langMenu = document.getElementById("langMenu");
+        const langButton = document.getElementById("langButton");
+        if (langMenu && langButton) {
+          langMenu.classList.add("hidden");
+          langButton.setAttribute("aria-expanded", "false");
+          langButton.classList.remove("active");
+        }
+
+        // Save preference to localStorage
+        localStorage.setItem("preferredLanguage", lang);
+      }
+
+      // Initialize AOS (Animate On Scroll)
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100,
+      });
+
+      // Initialize GSAP with ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Add GSAP animations for more advanced effects
+      document.addEventListener("DOMContentLoaded", () => {
+        // Load saved language preference or default to Arabic
+        const savedLang = localStorage.getItem("preferredLanguage") || "ar";
+        changeLanguage(savedLang);
+
+        // Language option click handlers
+        document.querySelectorAll(".lang-option").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            e.preventDefault();
+            const lang = option.getAttribute("data-lang");
+            changeLanguage(lang);
+          });
+        });
+
+        // Mobile language option click handlers
+        document.querySelectorAll(".lang-option-mobile").forEach((option) => {
+          option.addEventListener("click", (e) => {
+            e.preventDefault();
+            const lang = option.getAttribute("data-lang");
+            changeLanguage(lang);
+          });
+        });
+
+        // Vehicle selection functionality
+        const optionCards = document.querySelectorAll(".option-card");
+        const vehiclesInput = document.getElementById("vehicles");
+
+        optionCards.forEach((card) => {
+          card.addEventListener("click", () => {
+            // Remove selected class from all cards
+            optionCards.forEach((c) => c.classList.remove("selected"));
+
+            // Add selected class to clicked card
+            card.classList.add("selected");
+
+            // Set the value in hidden input
+            vehiclesInput.value = card.getAttribute("data-vehicles");
+          });
+        });
+
+        // Form submission handler
+        const partnershipForm = document.getElementById("partnershipForm");
+        const successMessage = document.getElementById("successMessage");
+
+        if (partnershipForm) {
+          partnershipForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Validate vehicle selection
+            if (!vehiclesInput.value) {
+              alert(
+                currentLang === "ar"
+                  ? "يرجى اختيار عدد المركبات المطلوبة"
+                  : "Please select the number of vehicles required"
+              );
+              return;
+            }
+
+            // Here you would typically send the form data to a server
+            // For demo purposes, we'll just show the success message
+
+            // Get form data
+            const formData = new FormData(partnershipForm);
+            const data = {
+              name: formData.get("name"),
+              phone: formData.get("phone"),
+              city: formData.get("city"),
+              vehicles: formData.get("vehicles"),
+            };
+
+            console.log("Form data:", data); // For testing
+
+            // Show success message
+            successMessage.style.display = "block";
+            successMessage.scrollIntoView({ behavior: "smooth" });
+
+            // Reset form after 3 seconds
+            setTimeout(() => {
+              partnershipForm.reset();
+              optionCards.forEach((card) => card.classList.remove("selected"));
+              vehiclesInput.value = "";
+              successMessage.style.display = "none";
+            }, 5000);
+          });
+        }
+
+        // Animate elements with GSAP
+        gsap.utils.toArray(".hover-3d").forEach((element) => {
+          element.addEventListener("mouseenter", () => {
+            gsap.to(element, {
+              duration: 0.5,
+              y: -10,
+              rotationX: 5,
+              ease: "power2.out",
+            });
+          });
+
+          element.addEventListener("mouseleave", () => {
+            gsap.to(element, {
+              duration: 0.5,
+              y: 0,
+              rotationX: 0,
+              ease: "power2.out",
+            });
+          });
+        });
+
+        // Magnetic button effect
+        gsap.utils.toArray(".magnetic-btn").forEach((button) => {
+          button.addEventListener("mousemove", (e) => {
+            const x = e.offsetX - button.clientWidth / 2;
+            const y = e.offsetY - button.clientHeight / 2;
+
+            gsap.to(button, {
+              duration: 0.3,
+              x: x * 0.1,
+              y: y * 0.1,
+              ease: "power2.out",
+            });
+          });
+
+          button.addEventListener("mouseleave", () => {
+            gsap.to(button, {
+              duration: 0.3,
+              x: 0,
+              y: 0,
+              ease: "power2.out",
+            });
+          });
+        });
+
+        // --- Language Dropdown Functionality ---
+        const langButton = document.getElementById("langButton");
+        const langMenu = document.getElementById("langMenu");
+
+        if (langButton && langMenu) {
+          langButton.addEventListener("click", () => {
+            const isExpanded =
+              langButton.getAttribute("aria-expanded") === "true" || false;
+            langButton.setAttribute("aria-expanded", !isExpanded);
+            langMenu.classList.toggle("hidden");
+            langButton.classList.toggle("active");
+          });
+
+          // Close dropdown if user clicks outside
+          document.addEventListener("click", (event) => {
+            if (
+              !langButton.contains(event.target) &&
+              !langMenu.contains(event.target)
+            ) {
+              langButton.setAttribute("aria-expanded", "false");
+              langMenu.classList.add("hidden");
+              langButton.classList.remove("active");
+            }
+          });
+        }
+
+        // --- Mobile Menu Toggle Functionality ---
+        const mobileMenuButton = document.getElementById("mobileMenuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
