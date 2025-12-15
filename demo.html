@@ -413,7 +413,7 @@
       minutesInput.addEventListener("input", () => {
         minutesInput.value = minutesInput.value.replace(/[^0-9]/g, "");
         minutes = parseInt(minutesInput.value) || 0;
-        price = vehicle === "سكوتر" ? minutes * 1 : minutes * 0.75;
+        price = minutes * 1;
         priceSpan.innerText = price;
         goScanBtn.disabled = !minutes || minutes <= 0;
       });
