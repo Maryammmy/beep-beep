@@ -138,6 +138,68 @@
         </div>
       </div>
     </section>
+    <!-- SCREEN :  MAP -->
+    <section
+      id="map"
+      class="screen max-w-6xl mx-auto mt-10 p-5 animate__animated animate__fadeInUp animate__fast"
+    >
+      <!-- TITLE -->
+      <h2
+        class="text-3xl font-extrabold mb-4 animate__animated animate__fadeInDown animate__delay-1s"
+      >
+        المركبات القريبة منك
+      </h2>
+
+      <!-- MAP -->
+      <div
+        class="w-full h-[500px] rounded-2xl overflow-hidden shadow-lg mb-6 animate__animated animate__zoomIn animate__delay-1s"
+      >
+        <img
+          src="/assets/img/map.jpeg"
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- SHOW DATA BUTTON -->
+      <button
+        onclick="showVehicleData()"
+        id="vehicleDataBtn"
+        class="bg-primary-yellow hover:bg-dark-yellow px-10 py-4 text-lg sm:text-2xl rounded-full font-bold transition-transform transform hover:-translate-y-1 animate__animated animate__fadeInUp animate__delay-2s"
+      >
+        عرض بيانات المركبة
+      </button>
+
+      <!-- VEHICLE DATA -->
+      <div
+        id="vehicleData"
+        class="hidden bg-white rounded-2xl shadow-lg p-6 mt-6 text-right text-xl animate__animated animate__fadeInUp animate__delay-1s"
+      >
+        <p
+          class="font-semibold mb-2 animate__animated animate__fadeInUp animate__delay-1s"
+        >
+          🔓 رسوم الفتح: <span id="unlockFee"></span> ريال
+        </p>
+        <p
+          class="font-semibold mb-2 animate__animated animate__fadeInUp animate__delay-1s"
+        >
+          ⏱ السعر بالدقيقة: <span id="perMin"></span> ريال
+        </p>
+        <p
+          class="font-semibold mb-4 animate__animated animate__fadeInUp animate__delay-1s"
+        >
+          🔋 مدى البطارية: <span id="range"></span> كم
+        </p>
+
+        <!-- GO TO TIME -->
+        <button
+          onclick="go('time')"
+          class="w-full bg-deep-black text-primary-yellow px-10 py-4 text-lg sm:text-2xl rounded-full font-bold transition-transform transform hover:-translate-y-1 animate__animated animate__pulse animate__infinite"
+        >
+          متابعة وتحديد الوقت
+        </button>
+      </div>
+    </section>
 
     <!-- SCREEN 2: تحديد الوقت -->
     <section id="time" class="screen max-w-xl mx-auto mt-10 p-5">
@@ -299,7 +361,42 @@
 
       function selectVehicle(v) {
         vehicle = v;
-        go("time");
+        go("map");
+      }
+      function showVehicleData() {
+        const dataBox = document.getElementById("vehicleData");
+        const unlockFee = document.getElementById("unlockFee");
+        const perMin = document.getElementById("perMin");
+        const range = document.getElementById("range");
+        const btn = document.getElementById("vehicleDataBtn");
+
+        if (vehicle === "سكوتر") {
+          unlockFee.innerText = "1.99";
+          perMin.innerText = "1";
+          range.innerText = "35";
+
+          btn.innerText = "عرض بيانات السكوتر";
+          drawRoute("scooter");
+        } else {
+          unlockFee.innerText = "0";
+          perMin.innerText = "0.75";
+          range.innerText = "50";
+
+          btn.innerText = "عرض بيانات الدراجة";
+          drawRoute("bike");
+        }
+
+        dataBox.classList.remove("hidden");
+      }
+
+      function drawRoute(type) {
+        console.log("Drawing route for:", type);
+        /*
+      هنا مستقبلاً:
+      - لو Scooter → route خاص بالسكوتر
+      - لو Bike → route خاص بالدراجات
+      (Google Maps API أو Mapbox أو Leaflet)
+    */
       }
 
       const minutesInput = document.getElementById("minutes");
