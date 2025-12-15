@@ -145,16 +145,21 @@
     >
       <!-- TITLE -->
       <h2
+        id="mapTitle"
+        90%
         class="text-3xl font-extrabold mb-4 animate__animated animate__fadeInDown animate__delay-1s"
       >
         المركبات القريبة منك
       </h2>
 
       <!-- MAP -->
+      <!-- MAP IMAGE -->
       <div
+        id="mapImageContainer"
         class="w-full h-[500px] rounded-2xl overflow-hidden shadow-lg mb-6 animate__animated animate__zoomIn animate__delay-1s"
       >
         <img
+          id="mapImage"
           src="/assets/img/map.jpeg"
           class="w-full h-full object-cover"
           loading="lazy"
@@ -188,7 +193,10 @@
         <p
           class="font-semibold mb-4 animate__animated animate__fadeInUp animate__delay-1s"
         >
-          🔋 مدى البطارية: <span id="range"></span> كم
+          🔋 مدى البطارية:
+          <span dir="ltr">90%</span>
+          -
+          <span id="rangeValue">31.5</span> كم
         </p>
 
         <!-- GO TO TIME -->
@@ -341,13 +349,10 @@
           .forEach((s) => s.classList.remove("active"));
         document.getElementById(id).classList.add("active");
 
-        // QR code generate when reaching scan screen
         if (id === "scan") {
-          // الرابط اللي هيفتح بعد المسح
           const qrData = `https://beepbeepksa.com?vehicle=${encodeURIComponent(
             vehicle
           )}&minutes=${minutes}&price=${price}`;
-
           QRCode.toCanvas(
             document.getElementById("qrcode"),
             qrData,
@@ -361,42 +366,44 @@
 
       function selectVehicle(v) {
         vehicle = v;
+        // تحديث صورة الخريطة حسب النوع
+        const mapImage = document.getElementById("mapImage");
+        const btn = document.getElementById("vehicleDataBtn");
+        const mapTitle = document.getElementById("mapTitle");
+
+        if (vehicle === "سكوتر") {
+          mapImage.src = "/assets/img/mapScooter.jpeg";
+          btn.innerText = "عرض بيانات السكوتر";
+          mapTitle.innerText = "السكوترات القريبة منك";
+        } else {
+          mapImage.src = "/assets/img/mapBike.jpeg";
+          btn.innerText = "عرض بيانات الدراجة";
+          mapTitle.innerText = "الدراجات القريبة منك";
+        }
         go("map");
       }
+
       function showVehicleData() {
         const dataBox = document.getElementById("vehicleData");
         const unlockFee = document.getElementById("unlockFee");
         const perMin = document.getElementById("perMin");
         const range = document.getElementById("range");
-        const btn = document.getElementById("vehicleDataBtn");
 
         if (vehicle === "سكوتر") {
           unlockFee.innerText = "0";
           perMin.innerText = "1";
-          range.innerText = "35";
-
-          btn.innerText = "عرض بيانات السكوتر";
-          drawRoute("scooter");
+          const fullRange = 35; // مدى البطارية الكامل للسكوتر
+          const rangeAt90 = fullRange * 0.9; // حساب 90% من مدى البطارية
+          rangeValue.innerText = rangeAt90.toFixed(1); // عرض النتيجة بشكل مضبوط
         } else {
           unlockFee.innerText = "0";
-          perMin.innerText = "0.75";
-          range.innerText = "50";
-
-          btn.innerText = "عرض بيانات الدراجة";
-          drawRoute("bike");
+          perMin.innerText = "1";
+          const fullRange = 50; // مدى البطارية الكامل للدراجة
+          const rangeAt90 = fullRange * 0.9; // حساب 90% من مدى البطارية
+          rangeValue.innerText = rangeAt90.toFixed(1); // عرض النتيجة بشكل مضبوط
         }
 
         dataBox.classList.remove("hidden");
-      }
-
-      function drawRoute(type) {
-        console.log("Drawing route for:", type);
-        /*
-      هنا مستقبلاً:
-      - لو Scooter → route خاص بالسكوتر
-      - لو Bike → route خاص بالدراجات
-      (Google Maps API أو Mapbox أو Leaflet)
-    */
       }
 
       const minutesInput = document.getElementById("minutes");
@@ -404,17 +411,10 @@
       const priceSpan = document.getElementById("price");
 
       minutesInput.addEventListener("input", () => {
-        // منع أي حرف غير رقم
         minutesInput.value = minutesInput.value.replace(/[^0-9]/g, "");
-
-        // حدّث المتغيرات العالمية
         minutes = parseInt(minutesInput.value) || 0;
-        price = minutes * 1;
-
-        // حدّث السعر في الشاشة
+        price = vehicle === "سكوتر" ? minutes * 1 : minutes * 0.75;
         priceSpan.innerText = price;
-
-        // تفعيل الزر فقط لو المستخدم كتب عدد أكبر من صفر
         goScanBtn.disabled = !minutes || minutes <= 0;
       });
 
