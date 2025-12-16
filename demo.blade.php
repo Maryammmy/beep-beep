@@ -1,0 +1,399 @@
+@extends('layouts.app')
+
+@section('title', 'بيب بيب - تجربة الاستئجار')
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* تنسيقات الصفحة */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #fef2ab !important;
+        }
+
+        .demo-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #000;
+            height: 750px; /* ارتفاع ثابت لضمان عدم اختفاء العناصر */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* الخريطة */
+        .map-bg {
+            background-color: #e5e7eb;
+            height: 45%;
+            width: 100%;
+            position: relative;
+            background-image: url("{{ asset('assets/img/map.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* في حال عدم وجود صورة للخريطة */
+        .map-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+
+        .vehicle-marker {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: #fdd703;
+            border: 3px solid #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .vehicle-marker:hover, .vehicle-marker.active {
+            transform: scale(1.2) translateY(-5px);
+            background: #000;
+            color: #fdd703;
+            border-color: #fdd703;
+            z-index: 20;
+        }
+
+        .bottom-sheet {
+            background: #fff;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            padding: 25px;
+            flex: 1;
+            position: relative;
+            margin-top: -30px;
+            z-index: 30;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .vehicle-img {
+            width: 140px;
+            height: auto;
+            margin: -70px auto 10px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+            transition: all 0.5s ease;
+            display: block;
+        }
+
+        .action-btn {
+            background: #000;
+            color: #fdd703;
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: auto; /* دفع الزر للأسفل */
+        }
+
+        .action-btn:disabled {
+            background: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* --- شاشة المسح QR (مهم جداً) --- */
+        .scan-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 100;
+            display: flex; /* تأكدنا من أنها فليكس */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .qr-frame {
+            width: 240px;
+            height: 240px;
+            border: 4px solid #fdd703;
+            border-radius: 20px;
+            position: relative;
+            background: #fff; /* خلفية بيضاء لضمان ظهور الرمز */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(253, 215, 3, 0.2);
+        }
+
+        /* إصلاح حجم صورة الـ QR داخل الإطار */
+        #qrcode img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: #fdd703;
+            position: absolute;
+            top: 0;
+            animation: scan 2s linear infinite;
+            box-shadow: 0 0 10px #fdd703;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; } 100% { top: 100%; }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+@endpush
+
+@section('content')
+    <div class="py-12">
+        <div class="container mx-auto px-4 text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary-black mb-2">تجربة بيب بيب</h1>
+            <p class="text-gray-600">جرب سيناريو استئجار السكوتر أو الدراجة الآن</p>
+        </div>
+
+        <div class="demo-container">
+
+            <div id="step1" class="h-full flex flex-col w-full">
+                <div class="map-bg">
+                    <div class="vehicle-marker" style="top: 40%; left: 30%;" onclick="selectVehicle('scooter', this)">
+                        <i class="fas fa-bolt text-xl"></i>
+                    </div>
+                    <div class="vehicle-marker" style="top: 60%; right: 25%;" onclick="selectVehicle('bike', this)">
+                        <i class="fas fa-bicycle text-xl"></i>
+                    </div>
+                </div>
+
+                <div class="bottom-sheet">
+                    <div id="selectMsg" class="text-center py-12 text-gray-400 h-full flex flex-col justify-center items-center">
+                        <i class="fas fa-map-marker-alt text-5xl mb-4 opacity-30"></i>
+                        <p class="text-lg">اختر مركبة من الخريطة للبدء</p>
+                    </div>
+
+                    <div id="dataBox" class="hidden h-full flex flex-col animate__animated animate__fadeInUp">
+                        <div class="flex justify-center">
+                            <img id="vImg" src="" class="vehicle-img" alt="Vehicle">
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <h2 id="vName" class="text-2xl font-black text-gray-800">...</h2>
+                            <div class="flex justify-center gap-3 mt-2 text-sm font-bold">
+                                <span class="bg-gray-100 px-3 py-1 rounded-full text-green-600"><i class="fas fa-battery-full"></i> 90%</span>
+                                <span class="bg-blue-50 px-3 py-1 rounded-full text-blue-600"><i class="fas fa-road"></i> <span id="rangeValue">--</span> كم</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4 text-center">
+                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                                <span class="text-gray-500 text-xs block">فتح القفل</span>
+                                <span class="font-bold text-lg"><span id="unlockFee">0</span> ريال</span>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                                <span class="text-gray-500 text-xs block">الدقيقة</span>
+                                <span class="font-bold text-lg"><span id="perMin">0</span> ريال</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="text-sm text-gray-500 mb-1 block font-bold">كم دقيقة ستركب؟</label>
+                            <div class="flex items-center bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 focus-within:border-brand-yellow transition-colors">
+                                <input type="number" id="minutes" placeholder="أدخل المدة..." class="bg-transparent border-none outline-none w-full text-center text-xl font-bold" min="1">
+                                <span class="text-gray-400 font-bold text-sm border-r pr-3 border-gray-300">دقيقة</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="font-bold text-gray-600">التكلفة التقديرية:</span>
+                            <span class="text-2xl font-black text-brand-black"><span id="price">0</span> <small class="text-sm text-gray-500 font-normal">ريال</small></span>
+                        </div>
+
+                        <button id="goScanBtn" onclick="goToScan()" disabled class="action-btn">
+                            <i class="fas fa-qrcode"></i> <span>مسح الرمز (Scan)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step2" class="scan-overlay hidden animate__animated animate__fadeIn">
+                <h2 class="text-2xl font-bold mb-8 text-[#fdd703]">جاري المسح...</h2>
+
+                <div class="qr-frame">
+                    <div class="scan-line"></div>
+                    <div id="qrcode"></div>
+                </div>
+
+                <p class="text-gray-400 text-sm mb-8 px-8 text-center leading-relaxed">
+                    وجه الكاميرا نحو الرمز الموجود<br>على مقود المركبة لفتح القفل
+                </p>
+
+                <button onclick="simulateSuccess()" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition shadow-lg transform hover:scale-105 border-none cursor-pointer">
+                   استمرار
+                </button>
+            </div>
+
+            <div id="step3" class="hidden h-full flex flex-col justify-center items-center bg-white p-8 animate__animated animate__zoomIn w-full">
+                <div class="w-24 h-24 bg-[#fdd703] rounded-full flex items-center justify-center mb-6 shadow-xl animate__animated animate__bounceIn">
+                    <i class="fas fa-check text-5xl text-black"></i>
+                </div>
+
+                <h2 class="text-3xl font-black mb-2 text-center text-brand-black">تم بنجاح!</h2>
+                <p class="text-gray-500 mb-8 text-center">استمتع برحلتك وقد بأمان</p>
+
+                <div class="bg-gray-50 w-full p-6 rounded-2xl border border-gray-100 mb-8 text-center shadow-sm">
+                    <div class="flex justify-between mb-3 border-b border-gray-200 pb-3">
+                        <span class="text-gray-500">المركبة</span>
+                        <strong id="cVehicle" class="text-brand-black">...</strong>
+                    </div>
+                    <div class="flex justify-between mb-3 border-b border-gray-200 pb-3">
+                        <span class="text-gray-500">المدة</span>
+                        <strong class="text-brand-black"><span id="cMinutes">0</span> دقيقة</strong>
+                    </div>
+                    <div class="flex justify-between items-center pt-1">
+                        <span class="text-gray-500 font-bold">الإجمالي</span>
+                        <strong class="text-2xl text-brand-black"><span id="cPrice">0</span> ريال</strong>
+                    </div>
+                </div>
+
+                <a href="{{ route('home') }}" class="action-btn text-decoration-none">
+                    إنهاء والعودة
+                </a>
+            </div>
+
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        let vehicleType = '';
+        let price = 0;
+        let minutes = 0;
+
+        // دالة اختيار المركبة
+        function selectVehicle(type, element) {
+            // إزالة التحديد السابق
+            document.querySelectorAll('.vehicle-marker').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // إظهار واجهة البيانات
+            document.getElementById('selectMsg').classList.add('hidden');
+            document.getElementById('dataBox').classList.remove('hidden');
+
+            const vName = document.getElementById('vName');
+            const vImg = document.getElementById('vImg');
+            const unlockFee = document.getElementById('unlockFee');
+            const perMin = document.getElementById('perMin');
+            const rangeValue = document.getElementById('rangeValue');
+
+            if (type === 'scooter') {
+                vehicleType = 'سكوتر كهربائي';
+                vName.innerText = vehicleType;
+                vImg.src = "{{ asset('assets/img/scooter.jpeg') }}";
+                unlockFee.innerText = '0';
+                perMin.innerText = '1';
+                rangeValue.innerText = '35';
+            } else {
+                vehicleType = 'دراجة كهربائية';
+                vName.innerText = vehicleType;
+                vImg.src = "{{ asset('assets/img/bike.png') }}";
+                unlockFee.innerText = '0';
+                perMin.innerText = '1';
+                rangeValue.innerText = '50';
+            }
+
+            // إعادة حساب السعر
+            calculatePrice();
+        }
+
+        // حساب السعر عند الكتابة
+        const minutesInput = document.getElementById('minutes');
+        const goScanBtn = document.getElementById('goScanBtn');
+        const priceSpan = document.getElementById('price');
+
+        minutesInput.addEventListener('input', calculatePrice);
+
+        function calculatePrice() {
+            // منع الحروف
+            minutesInput.value = minutesInput.value.replace(/[^0-9]/g, '');
+            minutes = parseInt(minutesInput.value) || 0;
+
+            let rate = 1;
+            let startFee =  0;
+
+            if (minutes > 0) {
+                price = (minutes * rate) + startFee;
+                goScanBtn.disabled = false;
+                goScanBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                price = 0;
+                goScanBtn.disabled = true;
+                goScanBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            priceSpan.innerText = price;
+        }
+
+        // الانتقال لشاشة المسح وتوليد الباركود
+        function goToScan() {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+
+            const qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = ""; // مسح القديم
+
+            // توليد الباركود (خلفية بيضاء ليظهر فوق الخلفية السوداء)
+            new QRCode(qrContainer, {
+                text: "BEEP-" + Math.random().toString(36).substring(7),
+                width: 220,
+                height: 220,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        // محاكاة نجاح المسح
+        function simulateSuccess() {
+            document.getElementById('cVehicle').innerText = vehicleType;
+            document.getElementById('cMinutes').innerText = minutes;
+            document.getElementById('cPrice').innerText = price;
+
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+        }
+    </script>
+@endpush
