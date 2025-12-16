@@ -4,59 +4,113 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>بيب بيب - تجربة الاستئجار</title>
-    
-    <link rel="icon" href="assets/img/logo.png" type="image/png" />
-    <link rel="apple-touch-icon" href="assets/img/Beeb beeb Logo-01.png" />
-    <link rel="shortcut icon" href="assets/img/Beeb beeb Logo-01.png" type="image/png" />
+
+    <link rel="icon" href="/assets/img/logo.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/img/logo.png" />
+    <link rel="shortcut icon" href="/assets/img/logo.png" type="image/png" />
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                yellow: "#FFD700",
+                darkYellow: "#e6c200",
+                black: "#1a1a1a",
+                lightBg: "#FFF8C4",
+              },
+              primary: {
+                // إضافة الألوان المستخدمة في الفوتر لتجنب المشاكل
+                black: "#1a1a1a",
+                yellow: "#FFD700",
+              },
+            },
+            fontFamily: {
+              cairo: ["Cairo", "sans-serif"],
+              tajawal: ["Tajawal", "sans-serif"], // تم الحفاظ على خط الـ Demo
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
 
     <style>
-        /* تنسيقات الصفحة */
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #fef2ab !important;
-        }
+      /* تنسيقات الـ Header والـ Body العامة */
+      body {
+        font-family: "Cairo", sans-serif;
+      }
+      .clip-path-header {
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      }
 
-        .demo-container {
-            max-width: 500px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            position: relative;
-            border: 8px solid #000;
-            height: 750px; /* ارتفاع ثابت لضمان عدم اختفاء العناصر */
-            display: flex;
-            flex-direction: column;
-        }
+      /* تنسيقات الـ Demo (تم نقلها كما هي)
+               ملاحظة: تم تعديل الـ body ليكون main-bg للحفاظ على الخلفية الصفراء داخل منطقة الديمو فقط
+            */
+      .demo-wrapper {
+        /* محاكاة لون الخلفية الأصلي للـ Demo */
+        background-color: #fef2ab;
+        min-height: 100vh;
+      }
 
-        /* الخريطة */
-        .map-bg {
-            background-color: #e5e7eb;
-            height: 45%;
-            width: 100%;
-            position: relative;
-            /* تم استبدال asset برابط نسبي */
-            background-image: url("assets/img/map.jpeg"); 
-            background-size: cover;
-            background-position: center;
-        }
+      .demo-container {
+        font-family: "Tajawal", sans-serif; /* الحفاظ على خط الـ Demo */
+        max-width: 500px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        position: relative;
+        border: 8px solid #000;
+        height: 750px;
+        display: flex;
+        flex-direction: column;
+      }
 
-        /* في حال عدم وجود صورة للخريطة */
-        .map-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
-            background-size: 20px 20px;
-            opacity: 0.5;
-        }
+      /* الخريطة */
+      .map-bg {
+        background-color: #e5e7eb;
+        height: 70%;
+        width: 100%;
+        position: relative;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)
+          ),
+          url("assets/img/map.jpeg");
+        background-size: cover;
+        background-position: center;
+      }
+
+      .map-bg::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+        background-size: 20px 20px;
+        opacity: 0.5;
+      }
 
       .vehicle-marker {
         position: absolute;
@@ -100,29 +154,29 @@
       .vehicle-img {
         width: 140px;
         height: auto;
-        margin: -70px auto 10px;
+        margin: -80px auto 10px;
         filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
         transition: all 0.5s ease;
         display: block;
       }
 
-        .action-btn {
-            background: #000;
-            color: #fdd703;
-            width: 100%;
-            padding: 16px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: auto; /* دفع الزر للأسفل */
-        }
+      .action-btn {
+        background: #000;
+        color: #fdd703;
+        width: 100%;
+        padding: 16px;
+        border-radius: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: auto;
+      }
 
       .action-btn:disabled {
         background: #e5e7eb;
@@ -130,43 +184,42 @@
         cursor: not-allowed;
       }
 
-        /* --- شاشة المسح QR (مهم جداً) --- */
-        .scan-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #1a1a1a;
-            z-index: 100;
-            display: flex; /* تأكدنا من أنها فليكس */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
+      /* --- شاشة المسح QR --- */
+      .scan-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #1a1a1a;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
 
-        .qr-frame {
-            width: 240px;
-            height: 240px;
-            border: 4px solid #fdd703;
-            border-radius: 20px;
-            position: relative;
-            background: #fff; /* خلفية بيضاء لضمان ظهور الرمز */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            padding: 10px;
-            box-shadow: 0 0 20px rgba(253, 215, 3, 0.2);
-        }
+      .qr-frame {
+        width: 240px;
+        height: 240px;
+        border: 4px solid #fdd703;
+        border-radius: 20px;
+        position: relative;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        padding: 10px;
+        box-shadow: 0 0 20px rgba(253, 215, 3, 0.2);
+      }
 
-        /* إصلاح حجم صورة الـ QR داخل الإطار */
-        #qrcode img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+      #qrcode img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
 
       .scan-line {
         width: 100%;
@@ -193,150 +246,476 @@
         display: none !important;
       }
     </style>
-</head>
-<body>
+  </head>
 
-    <div class="py-12">
-        <div class="container mx-auto px-4 text-center mb-8">
-            <h1 class="text-4xl font-bold text-primary-black mb-2">تجربة بيب بيب</h1>
-            <p class="text-gray-600">جرب سيناريو استئجار السكوتر أو الدراجة الآن</p>
+  <body
+    class="bg-gray-50 text-gray-800 antialiased overflow-x-hidden flex flex-col min-h-screen"
+  >
+    <header
+      class="bg-brand-black text-white relative clip-path-header pb-32 pt-20"
+    >
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-brand-yellow opacity-10 rounded-full blur-3xl -mr-16 -mt-16"
+      ></div>
+
+      <nav
+        class="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-20"
+      >
+        <a href="/index.html" class="flex items-center gap-3">
+          <img
+            src="/assets/img/logo.png"
+            alt="BEEP BEEP Logo"
+            class="h-14 w-auto object-contain"
+          />
+        </a>
+        <div class="flex gap-4">
+          <a
+            href="/index.html"
+            class="text-brand-yellow font-bold text-lg hover:text-white transition"
+            >الرئيسية</a
+          >
         </div>
+      </nav>
 
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <h1 class="text-4xl font-bold text-brand-yellow mb-2">تجربة بيب بيب</h1>
+        <p class="text-gray-300">جرب سيناريو استئجار السكوتر أو الدراجة الآن</p>
+      </div>
+    </header>
+    <main class="flex-grow demo-wrapper">
+      <div class="py-12">
         <div class="demo-container">
-
-            <div id="step1" class="h-full flex flex-col w-full">
-                <div class="map-bg">
-                    <div class="vehicle-marker" style="top: 40%; left: 30%;" onclick="selectVehicle('scooter', this)">
-                        <i class="fas fa-bolt text-xl"></i>
-                    </div>
-                    <div class="vehicle-marker" style="top: 60%; right: 25%;" onclick="selectVehicle('bike', this)">
-                        <i class="fas fa-bicycle text-xl"></i>
-                    </div>
-                </div>
-
-                <div class="bottom-sheet">
-                    <div id="selectMsg" class="text-center py-12 text-gray-400 h-full flex flex-col justify-center items-center">
-                        <i class="fas fa-map-marker-alt text-5xl mb-4 opacity-30"></i>
-                        <p class="text-lg">اختر مركبة من الخريطة للبدء</p>
-                    </div>
-
-                    <div id="dataBox" class="hidden h-full flex flex-col animate__animated animate__fadeInUp">
-                        <div class="flex justify-center">
-                            <img id="vImg" src="" class="vehicle-img" alt="Vehicle">
-                        </div>
-
-                        <div class="text-center mb-4">
-                            <h2 id="vName" class="text-2xl font-black text-gray-800">...</h2>
-                            <div class="flex justify-center gap-3 mt-2 text-sm font-bold">
-                                <span class="bg-gray-100 px-3 py-1 rounded-full text-green-600"><i class="fas fa-battery-full"></i> 90%</span>
-                                <span class="bg-blue-50 px-3 py-1 rounded-full text-blue-600"><i class="fas fa-road"></i> <span id="rangeValue">--</span> كم</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3 mb-4 text-center">
-                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                                <span class="text-gray-500 text-xs block">فتح القفل</span>
-                                <span class="font-bold text-lg"><span id="unlockFee">0</span> ريال</span>
-                            </div>
-                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                                <span class="text-gray-500 text-xs block">الدقيقة</span>
-                                <span class="font-bold text-lg"><span id="perMin">0</span> ريال</span>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="text-sm text-gray-500 mb-1 block font-bold">كم دقيقة ستركب؟</label>
-                            <div class="flex items-center bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 focus-within:border-brand-yellow transition-colors">
-                                <input type="number" id="minutes" placeholder="أدخل المدة..." class="bg-transparent border-none outline-none w-full text-center text-xl font-bold" min="1">
-                                <span class="text-gray-400 font-bold text-sm border-r pr-3 border-gray-300">دقيقة</span>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="font-bold text-gray-600">التكلفة التقديرية:</span>
-                            <span class="text-2xl font-black text-brand-black"><span id="price">0</span> <small class="text-sm text-gray-500 font-normal">ريال</small></span>
-                        </div>
-
-                        <button id="goScanBtn" onclick="goToScan()" disabled class="action-btn">
-                            <i class="fas fa-qrcode"></i> <span>مسح الرمز (Scan)</span>
-                        </button>
-                    </div>
-                </div>
+          <div id="step1" class="h-full flex flex-col w-full">
+            <div class="map-bg">
+              <div
+                class="vehicle-marker"
+                style="top: 40%; left: 30%"
+                onclick="selectVehicle('scooter', this)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scooter-icon lucide-scooter"
+                >
+                  <path d="M21 4h-3.5l2 11.05" />
+                  <path
+                    d="M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009"
+                  />
+                  <circle cx="19.5" cy="17.5" r="2.5" />
+                  <circle cx="4.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 60%; right: 25%"
+                onclick="selectVehicle('bike', this)"
+              >
+                <i class="fas fa-bicycle text-xl"></i>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 30%; left: 80%"
+                onclick="selectVehicle('scooter', this)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scooter-icon lucide-scooter"
+                >
+                  <path d="M21 4h-3.5l2 11.05" />
+                  <path
+                    d="M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009"
+                  />
+                  <circle cx="19.5" cy="17.5" r="2.5" />
+                  <circle cx="4.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 10%; right: 80%"
+                onclick="selectVehicle('bike', this)"
+              >
+                <i class="fas fa-bicycle text-xl"></i>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 20%; left: 60%"
+                onclick="selectVehicle('scooter', this)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scooter-icon lucide-scooter"
+                >
+                  <path d="M21 4h-3.5l2 11.05" />
+                  <path
+                    d="M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009"
+                  />
+                  <circle cx="19.5" cy="17.5" r="2.5" />
+                  <circle cx="4.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 70%; right: 80%"
+                onclick="selectVehicle('bike', this)"
+              >
+                <i class="fas fa-bicycle text-xl"></i>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 80%; left: 60%"
+                onclick="selectVehicle('scooter', this)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scooter-icon lucide-scooter"
+                >
+                  <path d="M21 4h-3.5l2 11.05" />
+                  <path
+                    d="M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009"
+                  />
+                  <circle cx="19.5" cy="17.5" r="2.5" />
+                  <circle cx="4.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 10%; right: 10%"
+                onclick="selectVehicle('bike', this)"
+              >
+                <i class="fas fa-bicycle text-xl"></i>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 55%; left: 15%"
+                onclick="selectVehicle('scooter', this)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-scooter-icon lucide-scooter"
+                >
+                  <path d="M21 4h-3.5l2 11.05" />
+                  <path
+                    d="M6.95 17h5.142c.523 0 .95-.406 1.063-.916a6.5 6.5 0 0 1 5.345-5.009"
+                  />
+                  <circle cx="19.5" cy="17.5" r="2.5" />
+                  <circle cx="4.5" cy="17.5" r="2.5" />
+                </svg>
+              </div>
+              <div
+                class="vehicle-marker"
+                style="top: 30%; right: 75%"
+                onclick="selectVehicle('bike', this)"
+              >
+                <i class="fas fa-bicycle text-xl"></i>
+              </div>
             </div>
 
-            <div id="step2" class="scan-overlay hidden animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-bold mb-8 text-[#fdd703]">جاري المسح...</h2>
+            <div class="bottom-sheet">
+              <div
+                id="selectMsg"
+                class="text-center py-12 text-gray-400 h-full flex flex-col justify-center items-center"
+              >
+                <i class="fas fa-map-marker-alt text-5xl mb-4 opacity-30"></i>
+                <p class="text-lg">اختر مركبة من الخريطة للبدء</p>
+              </div>
 
-                <div class="qr-frame">
-                    <div class="scan-line"></div>
-                    <div id="qrcode"></div>
+              <div
+                id="dataBox"
+                class="hidden h-full flex flex-col animate__animated animate__fadeInUp"
+              >
+                <div class="flex justify-center">
+                  <img id="vImg" src="" class="vehicle-img" alt="Vehicle" />
                 </div>
 
-                <p class="text-gray-400 text-sm mb-8 px-8 text-center leading-relaxed">
-                    وجه الكاميرا نحو الرمز الموجود<br>على مقود المركبة لفتح القفل
-                </p>
+                <div class="text-center mb-4">
+                  <h2 id="vName" class="text-2xl font-black text-gray-800">
+                    ...
+                  </h2>
+                  <div class="flex justify-center gap-3 mt-2 text-sm font-bold">
+                    <span
+                      class="bg-gray-100 px-3 py-1 rounded-full text-green-600"
+                      ><i class="fas fa-battery-full"></i> 90%</span
+                    >
+                    <span
+                      class="bg-blue-50 px-3 py-1 rounded-full text-blue-600"
+                      ><i class="fas fa-road"></i>
+                      <span id="rangeValue">--</span> كم</span
+                    >
+                  </div>
+                </div>
 
-                <button onclick="simulateSuccess()" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition shadow-lg transform hover:scale-105 border-none cursor-pointer">
-                   استمرار
+                <div class="grid grid-cols-2 gap-3 mb-4 text-center">
+                  <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                    <span class="text-gray-500 text-xs block">فتح القفل</span>
+                    <span class="font-bold text-lg"
+                      ><span id="unlockFee">0</span> ريال</span
+                    >
+                  </div>
+                  <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                    <span class="text-gray-500 text-xs block">الدقيقة</span>
+                    <span class="font-bold text-lg"
+                      ><span id="perMin">0</span> ريال</span
+                    >
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label class="text-sm text-gray-500 mb-1 block font-bold"
+                    >كم دقيقة ستركب؟</label
+                  >
+                  <div
+                    class="flex items-center bg-gray-50 border-2 border-gray-200 rounded-xl px-4 py-3 focus-within:border-brand-yellow transition-colors"
+                  >
+                    <input
+                      type="number"
+                      id="minutes"
+                      placeholder="أدخل المدة..."
+                      class="bg-transparent border-none outline-none w-full text-center text-xl font-bold"
+                      min="1"
+                    />
+                    <span
+                      class="text-gray-400 font-bold text-sm border-r pr-3 border-gray-300"
+                      >دقيقة</span
+                    >
+                  </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-4 px-2">
+                  <span class="font-bold text-gray-600"
+                    >التكلفة التقديرية:</span
+                  >
+                  <span class="text-2xl font-black text-brand-black"
+                    ><span id="price">0</span>
+                    <small class="text-sm text-gray-500 font-normal"
+                      >ريال</small
+                    ></span
+                  >
+                </div>
+
+                <button
+                  id="goScanBtn"
+                  onclick="goToScan()"
+                  disabled
+                  class="action-btn"
+                >
+                  <i class="fas fa-qrcode"></i> <span>مسح الرمز (Scan)</span>
                 </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="step2"
+            class="scan-overlay hidden animate__animated animate__fadeIn"
+          >
+            <h2 class="text-2xl font-bold mb-8 text-[#fdd703]">
+              جاري المسح...
+            </h2>
+
+            <div class="qr-frame">
+              <div class="scan-line"></div>
+              <div id="qrcode"></div>
             </div>
 
-            <div id="step3" class="hidden h-full flex flex-col justify-center items-center bg-white p-8 animate__animated animate__zoomIn w-full">
-                <div class="w-24 h-24 bg-[#fdd703] rounded-full flex items-center justify-center mb-6 shadow-xl animate__animated animate__bounceIn">
-                    <i class="fas fa-check text-5xl text-black"></i>
-                </div>
+            <p
+              class="text-gray-400 text-sm mb-8 px-8 text-center leading-relaxed"
+            >
+              وجه الكاميرا نحو الرمز الموجود<br />على مقود المركبة لفتح القفل
+            </p>
 
-                <h2 class="text-3xl font-black mb-2 text-center text-brand-black">تم بنجاح!</h2>
-                <p class="text-gray-500 mb-8 text-center">استمتع برحلتك وقد بأمان</p>
+            <button
+              onclick="simulateSuccess()"
+              class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition shadow-lg transform hover:scale-105 border-none cursor-pointer"
+            >
+              استمرار
+            </button>
+          </div>
 
-                <div class="bg-gray-50 w-full p-6 rounded-2xl border border-gray-100 mb-8 text-center shadow-sm">
-                    <div class="flex justify-between mb-3 border-b border-gray-200 pb-3">
-                        <span class="text-gray-500">المركبة</span>
-                        <strong id="cVehicle" class="text-brand-black">...</strong>
-                    </div>
-                    <div class="flex justify-between mb-3 border-b border-gray-200 pb-3">
-                        <span class="text-gray-500">المدة</span>
-                        <strong class="text-brand-black"><span id="cMinutes">0</span> دقيقة</strong>
-                    </div>
-                    <div class="flex justify-between items-center pt-1">
-                        <span class="text-gray-500 font-bold">الإجمالي</span>
-                        <strong class="text-2xl text-brand-black"><span id="cPrice">0</span> ريال</strong>
-                    </div>
-                </div>
-
-                <a href="index.html" class="action-btn text-decoration-none">
-                    إنهاء والعودة
-                </a>
+          <div
+            id="step3"
+            class="hidden h-full flex flex-col justify-center items-center bg-white p-8 animate__animated animate__zoomIn w-full"
+          >
+            <div
+              class="w-24 h-24 bg-[#fdd703] rounded-full flex items-center justify-center mb-6 shadow-xl animate__animated animate__bounceIn"
+            >
+              <i class="fas fa-check text-5xl text-black"></i>
             </div>
 
+            <h2 class="text-3xl font-black mb-2 text-center text-brand-black">
+              تم بنجاح!
+            </h2>
+            <p class="text-gray-500 mb-8 text-center">
+              استمتع برحلتك وقد بأمان
+            </p>
+
+            <div
+              class="bg-gray-50 w-full p-6 rounded-2xl border border-gray-100 mb-8 text-center shadow-sm"
+            >
+              <div
+                class="flex justify-between mb-3 border-b border-gray-200 pb-3"
+              >
+                <span class="text-gray-500">المركبة</span>
+                <strong id="cVehicle" class="text-brand-black">...</strong>
+              </div>
+              <div
+                class="flex justify-between mb-3 border-b border-gray-200 pb-3"
+              >
+                <span class="text-gray-500">المدة</span>
+                <strong class="text-brand-black"
+                  ><span id="cMinutes">0</span> دقيقة</strong
+                >
+              </div>
+              <div class="flex justify-between items-center pt-1">
+                <span class="text-gray-500 font-bold">الإجمالي</span>
+                <strong class="text-2xl text-brand-black"
+                  ><span id="cPrice">0</span> ريال</strong
+                >
+              </div>
+            </div>
+
+            <a href="/index.html" class="action-btn text-decoration-none">
+              إنهاء والعودة
+            </a>
+          </div>
         </div>
-    </div>
+      </div>
+    </main>
+    <footer class="bg-brand-black text-white py-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+        >
+          <p class="text-sm text-gray-400" data-translate="copyright">
+            &copy; 2025 تطبيق بيب بيب. جميع الحقوق محفوظة.
+          </p>
 
-                <div class="flex gap-4 items-center" dir="ltr">
-                    <a href="https://x.com/beepbeepksa?s=11" aria-label="X" class="text-gray-400 hover:text-brand-yellow transition-all duration-150">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2H21L13.315 10.52 22 22h-6.808l-5.263-6.873L3.56 22H2l8.27-9.035L2 2h6.91l4.77 6.315L18.244 2zm-2.59 17.17h2.057L8.5 4.743H6.293l9.36 14.427z"/>
-                        </svg>
-                    </a>
-                    <a href="https://www.instagram.com/beepbeepksa?igsh=YmZzdnMwN2FmZmE=" aria-label="Instagram" class="text-gray-400 hover:text-brand-yellow transition-all duration-150">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
-                    <a href="https://www.linkedin.com/company/beepbeepksa/" aria-label="LinkedIn" class="text-gray-400 hover:text-brand-yellow transition-all duration-150">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                    </a>
-                    <a href="https://www.tiktok.com/@beepbeepksa?_r=1&_t=ZS-91qAFEMO7Dc" aria-label="TikTok" class="text-gray-400 hover:text-brand-yellow transition-all duration-150">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                        </svg>
-                    </a>
-                    <a href="https://snapchat.com/t/mr3outsc" aria-label="Snapchat" class="text-gray-400 hover:text-brand-yellow transition-all duration-150 mt-1.5">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2c2.39 0 4.32 1.94 4.32 4.32v1.02c.01.35.21.66.53.79 1.01.44 2.1 1.02 2.1 2.14 0 .58-.32 1.09-.89 1.43-.28.17-.45.47-.45.78 0 .47.32.89.76 1.02.47.14.96.29 1.36.51.33.17.55.5.55.86a.97.97 0 01-.97.97c-.18 0-.36-.05-.54-.13a4.47 4.47 0 00-1.89-.45c-.41 0-.81.07-1.2.22-.46.16-.95.25-1.45.25-.73 0-1.42-.18-2.04-.49a1.86 1.86 0 00-1.7 0 4.7 4.7 0 01-2.04.49c-.5 0-.99-.09-1.45-.25-.38-.15-.79-.22-1.2-.22-.7 0-1.36.18-1.89.45-.18.08-.36.13-.54.13a.97.97 0 01-.97-.97c0-.36.22-.69.55-.86.4-.22.89-.37 1.36-.51.44-.13.76-.55.76-1.02 0-.31-.17-.6-.45-.78-.57-.34-.89-.85-.89-1.43 0-1.12 1.1-1.7 2.1-2.14.32-.13.52-.44.53-.79V6.32C7.68 3.94 9.61 2 12 2z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
+          <div class="flex gap-6 text-sm">
+            <a
+              target="_blank"
+              href="#"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+              data-translate="privacy"
+              >سياسة الخصوصية</a
+            >
+            <a
+              target="_blank"
+              href="#"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+              data-translate="terms"
+              >شروط الخدمة</a
+            >
+            <a
+              target="_blank"
+              href="#"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+              data-translate="contact"
+              >اتصل بنا</a
+            >
+          </div>
+
+          <div class="flex gap-4 items-center" dir="ltr">
+            <a
+              target="_blank"
+              href="https://x.com/beepbeepksa?s=11"
+              aria-label="X"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2H21L13.315 10.52 22 22h-6.808l-5.263-6.873L3.56 22H2l8.27-9.035L2 2h6.91l4.77 6.315L18.244 2zm-2.59 17.17h2.057L8.5 4.743H6.293l9.36 14.427z"
+                />
+              </svg>
+            </a>
+            <a
+              target="_blank"
+              href="https://www.instagram.com/beepbeepksa?igsh=YmZzdnMwN2FmZmE="
+              aria-label="Instagram"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                />
+              </svg>
+            </a>
+            <a
+              target="_blank"
+              href="https://www.linkedin.com/company/beepbeepksa/"
+              aria-label="LinkedIn"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                />
+              </svg>
+            </a>
+            <a
+              target="_blank"
+              href="https://www.tiktok.com/@beepbeepksa?_r=1&_t=ZS-91qAFEMO7Dc"
+              aria-label="TikTok"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+                />
+              </svg>
+            </a>
+            <a
+              target="_blank"
+              href="https://snapchat.com/t/mr3outsc"
+              aria-label="Snapchat"
+              class="text-gray-400 hover:text-brand-yellow transition-all duration-150 mt-1.5"
+            >
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2c2.39 0 4.32 1.94 4.32 4.32v1.02c.01.35.21.66.53.79 1.01.44 2.1 1.02 2.1 2.14 0 .58-.32 1.09-.89 1.43-.28.17-.45.47-.45.78 0 .47.32.89.76 1.02.47.14.96.29 1.36.51.33.17.55.5.55.86a.97.97 0 01-.97.97c-.18 0-.36-.05-.54-.13a4.47 4.47 0 00-1.89-.45c-.41 0-.81.07-1.2.22-.46.16-.95.25-1.45.25-.73 0-1.42-.18-2.04-.49a1.86 1.86 0 00-1.7 0 4.7 4.7 0 01-2.04.49c-.5 0-.99-.09-1.45-.25-.38-.15-.79-.22-1.2-.22-.7 0-1.36.18-1.89.45-.18.08-.36.13-.54.13a.97.97 0 01-.97-.97c0-.36.22-.69.55-.86.4-.22.89-.37 1.36-.51.44-.13.76-.55.76-1.02 0-.31-.17-.6-.45-.78-.57-.34-.89-.85-.89-1.43 0-1.12 1.1-1.7 2.1-2.14.32-.13.52-.44.53-.79V6.32C7.68 3.94 9.61 2 12 2z"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
+      </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -345,15 +724,14 @@
       let price = 0;
       let minutes = 0;
 
-        // دالة اختيار المركبة
-        function selectVehicle(type, element) {
-            // إزالة التحديد السابق
-            document.querySelectorAll('.vehicle-marker').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
+      function selectVehicle(type, element) {
+        document
+          .querySelectorAll(".vehicle-marker")
+          .forEach((el) => el.classList.remove("active"));
+        element.classList.add("active");
 
-            // إظهار واجهة البيانات
-            document.getElementById('selectMsg').classList.add('hidden');
-            document.getElementById('dataBox').classList.remove('hidden');
+        document.getElementById("selectMsg").classList.add("hidden");
+        document.getElementById("dataBox").classList.remove("hidden");
 
         const vName = document.getElementById("vName");
         const vImg = document.getElementById("vImg");
@@ -361,39 +739,34 @@
         const perMin = document.getElementById("perMin");
         const rangeValue = document.getElementById("rangeValue");
 
-            if (type === 'scooter') {
-                vehicleType = 'سكوتر كهربائي';
-                vName.innerText = vehicleType;
-                // تم استبدال asset بالمسار النسبي
-                vImg.src = "assets/img/scooter.jpeg";
-                unlockFee.innerText = '0';
-                perMin.innerText = '1';
-                rangeValue.innerText = '35';
-            } else {
-                vehicleType = 'دراجة كهربائية';
-                vName.innerText = vehicleType;
-                // تم استبدال asset بالمسار النسبي
-                vImg.src = "assets/img/bike.png";
-                unlockFee.innerText = '0';
-                perMin.innerText = '1';
-                rangeValue.innerText = '50';
-            }
-
-            // إعادة حساب السعر
-            calculatePrice();
+        if (type === "scooter") {
+          vehicleType = "سكوتر كهربائي";
+          vName.innerText = vehicleType;
+          vImg.src = "assets/img/scooter.png";
+          unlockFee.innerText = "0";
+          perMin.innerText = "1";
+          rangeValue.innerText = "35";
+        } else {
+          vehicleType = "دراجة كهربائية";
+          vName.innerText = vehicleType;
+          vImg.src = "assets/img/bike.png";
+          unlockFee.innerText = "0";
+          perMin.innerText = "1";
+          rangeValue.innerText = "50";
         }
 
-        // حساب السعر عند الكتابة
-        const minutesInput = document.getElementById('minutes');
-        const goScanBtn = document.getElementById('goScanBtn');
-        const priceSpan = document.getElementById('price');
+        calculatePrice();
+      }
+
+      const minutesInput = document.getElementById("minutes");
+      const goScanBtn = document.getElementById("goScanBtn");
+      const priceSpan = document.getElementById("price");
 
       minutesInput.addEventListener("input", calculatePrice);
 
-        function calculatePrice() {
-            // منع الحروف
-            minutesInput.value = minutesInput.value.replace(/[^0-9]/g, '');
-            minutes = parseInt(minutesInput.value) || 0;
+      function calculatePrice() {
+        minutesInput.value = minutesInput.value.replace(/[^0-9]/g, "");
+        minutes = parseInt(minutesInput.value) || 0;
 
         let rate = 1;
         let startFee = 0;
@@ -411,30 +784,27 @@
         priceSpan.innerText = price;
       }
 
-        // الانتقال لشاشة المسح وتوليد الباركود
-        function goToScan() {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
+      function goToScan() {
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
 
-            const qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = ""; // مسح القديم
+        const qrContainer = document.getElementById("qrcode");
+        qrContainer.innerHTML = "";
 
-            // توليد الباركود (خلفية بيضاء ليظهر فوق الخلفية السوداء)
-            new QRCode(qrContainer, {
-                text: "BEEP-" + Math.random().toString(36).substring(7),
-                width: 220,
-                height: 220,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-        }
+        new QRCode(qrContainer, {
+          text: "BEEP-" + Math.random().toString(36).substring(7),
+          width: 220,
+          height: 220,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
 
-        // محاكاة نجاح المسح
-        function simulateSuccess() {
-            document.getElementById('cVehicle').innerText = vehicleType;
-            document.getElementById('cMinutes').innerText = minutes;
-            document.getElementById('cPrice').innerText = price;
+      function simulateSuccess() {
+        document.getElementById("cVehicle").innerText = vehicleType;
+        document.getElementById("cMinutes").innerText = minutes;
+        document.getElementById("cPrice").innerText = price;
 
         document.getElementById("step2").classList.add("hidden");
         document.getElementById("step3").classList.remove("hidden");
